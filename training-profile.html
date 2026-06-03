@@ -1,0 +1,920 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Training Portfolio</title>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-soft: #f1f5f9;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: rgba(15, 23, 42, 0.08);
+            --blue: #2563eb;
+            --indigo: #1e40af;
+            --teal: #0f766e;
+            --purple: #7c3aed;
+            --shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+            --radius: 28px;
+            --radius-sm: 18px;
+            --spacing: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #eef2f7 0%, #f8fbff 100%);
+            color: var(--text);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .page-wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .controls-section {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 16px;
+            align-items: end;
+            margin-bottom: 24px;
+        }
+
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 24px;
+            padding: 18px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .control-group input,
+        .control-group select {
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            border-radius: 14px;
+            background: #f8fafc;
+            color: var(--text);
+            padding: 14px 16px;
+            font-size: 14px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: rgba(37, 99, 235, 0.45);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 16px;
+            padding: 14px 22px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--indigo), var(--blue));
+            color: white;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--indigo);
+            border: 1px solid rgba(37, 99, 235, 0.12);
+        }
+
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+            border-radius: 32px;
+            padding: 40px;
+            background: linear-gradient(180deg, #1e3a8a 0%, #112d5c 100%);
+            color: #f8fafc;
+            box-shadow: var(--shadow);
+            margin-bottom: 28px;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.12), transparent 36%),
+                        radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.16), transparent 30%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            position: relative;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .hero-photo {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.22), rgba(15, 23, 42, 0.18));
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+        }
+
+        .hero-photo img {
+            width: 196px;
+            height: 196px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.28);
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.78);
+            margin-bottom: 18px;
+        }
+
+        .eyebrow::before {
+            content: '';
+            width: 28px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .hero-copy h1 {
+            font-size: clamp(2.6rem, 2.4vw, 3.4rem);
+            line-height: 1.02;
+            margin-bottom: 12px;
+        }
+
+        .hero-copy p.title {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-copy p.lead {
+            max-width: 760px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.82);
+            margin-bottom: 18px;
+        }
+
+        .hero-kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 22px;
+            padding: 18px 20px;
+            backdrop-filter: blur(12px);
+            color: white;
+            min-height: 110px;
+        }
+
+        .kpi-card strong {
+            display: block;
+            font-size: 1.95rem;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .kpi-card span {
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 0.88rem;
+        }
+
+        .dashboard-section,
+        .timeline-section,
+        .gallery-section {
+            margin-bottom: 28px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 1.3rem;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .dashboard-card {
+            background: var(--surface);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 24px;
+            box-shadow: 0 18px 30px rgba(15, 23, 42, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 24px 40px rgba(15, 23, 42, 0.1);
+        }
+
+        .dashboard-card .dash-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--indigo);
+        }
+
+        .dashboard-card .dash-label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .timeline-wrapper {
+            display: grid;
+            gap: 20px;
+        }
+
+        .timeline-item {
+            position: relative;
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 24px;
+            align-items: flex-start;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 31px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(37, 99, 235, 0.16), rgba(15, 23, 42, 0.08));
+        }
+
+        .timeline-marker {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--blue);
+            box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.12);
+            margin-top: 4px;
+        }
+
+        .timeline-card {
+            background: var(--surface);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            padding: 26px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+        }
+
+        .training-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .badge-primary {
+            background: rgba(37, 99, 235, 0.12);
+            color: var(--indigo);
+        }
+
+        .training-top h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .provider {
+            color: var(--text-muted);
+            font-size: 0.96rem;
+            margin-bottom: 6px;
+        }
+
+        .training-date {
+            font-family: Inter, sans-serif;
+            color: var(--indigo);
+            font-size: 0.95rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .training-description {
+            color: var(--text);
+            font-size: 0.96rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .training-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .meta-item {
+            background: var(--surface-soft);
+            padding: 18px;
+            border-radius: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            color: var(--text-muted);
+        }
+
+        .meta-item span {
+            display: block;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .certificate-line {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            background: rgba(37, 99, 235, 0.08);
+            border: 1px solid rgba(37, 99, 235, 0.18);
+            color: var(--indigo);
+            border-radius: 18px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .gallery-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            min-height: 180px;
+            background: var(--surface);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 26px 50px rgba(15, 23, 42, 0.12);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-card:hover img {
+            transform: scale(1.03);
+        }
+
+        .gallery-pill {
+            position: absolute;
+            left: 16px;
+            bottom: 16px;
+            background: rgba(15, 23, 42, 0.78);
+            color: white;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.8rem;
+        }
+
+        .no-results {
+            padding: 30px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            background: var(--surface);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 22px;
+        }
+
+        .no-results strong {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .toolbar-footer {
+            color: var(--text-muted);
+            font-size: 13px;
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .watermark {
+            display: none;
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .watermark span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 5rem;
+            color: rgba(15, 23, 42, 0.06);
+            letter-spacing: 0.5em;
+            white-space: nowrap;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .controls-section,
+            .button-group,
+            .btn,
+            .toolbar-footer,
+            .gallery-card:hover,
+            .dashboard-card:hover {
+                display: none !important;
+                box-shadow: none !important;
+            }
+
+            .hero-section,
+            .dashboard-card,
+            .timeline-card,
+            .gallery-card,
+            .control-panel {
+                border-color: rgba(0, 0, 0, 0.08);
+                box-shadow: none !important;
+            }
+
+            .watermark {
+                display: block;
+            }
+
+            .page-wrapper {
+                max-width: none;
+                margin: 0;
+            }
+
+            .timeline-item,
+            .gallery-grid,
+            .gallery-card {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 18mm;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-photo {
+                margin: 0 auto;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .timeline-item {
+                grid-template-columns: 40px 1fr;
+            }
+        }
+
+        @media (max-width: 760px) {
+            body {
+                padding: 16px;
+            }
+
+            .controls-section {
+                grid-template-columns: 1fr;
+            }
+
+            .control-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                justify-content: stretch;
+            }
+
+            .dashboard-grid,
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-section {
+                padding: 24px;
+            }
+
+            .hero-copy h1 {
+                font-size: 2.4rem;
+            }
+
+            .timeline-item {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item::before {
+                left: 18px;
+            }
+
+            .training-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .training-date {
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="controls-section">
+            <div class="control-panel">
+                <div class="control-group">
+                    <label for="searchInput">Search training record</label>
+                    <input id="searchInput" type="text" placeholder="Search title, category, provider...">
+                </div>
+                <div class="control-group">
+                    <label for="categoryFilter">Category filter</label>
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" id="printBtn">Print Portfolio</button>
+            </div>
+        </div>
+
+        <section class="hero-section">
+            <div class="hero-inner">
+                <div class="hero-photo">
+                    <img src="Profile.jpg" alt="Profile Photo">
+                </div>
+                <div class="hero-copy">
+                    
+                    <h1>Syed Aftab Gillani</h1>
+                    <p class="title">Chief Operating Officer, Islamabad International Airport</p>
+                    <p class="lead">A distinguished aviation leader currently serving as the Chief Operating Officer at Islamabad International Airport. With a deep expertise in driving airport operations and modernization, he stands at the forefront of digital transformation, actively integrating artificial intelligence, robotics, and next-generation technologies into the aviation industry.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="timeline-section">
+
+            <div class="section-header">
+                <h2>Executive Training Timeline</h2>
+            </div>
+            <div class="timeline-wrapper" id="recordsContainer"></div>
+            <div class="no-results" id="noResultsMessage" style="display:none;">
+                <strong>No matching records found.</strong>
+                Adjust your search or filter selection to display records.
+            </div>
+        </section>
+
+        <div class="toolbar-footer">Syed Aftab Gillani</div>
+    </div>
+
+    <div class="watermark"><span>TRAINING PORTFOLIO</span></div>
+
+    <script>
+        const trainingData = [
+            {
+                title: "AI & Digital Transformation in Aviation",
+                category: "AI & Aviation",
+                provider: "NUST National Centre of Artificial Intelligence",
+                date: "2025-06-05",
+                duration: "1 Day",
+                description: "Delivered a key note speech on Artificial intelligence and Digital Transformation in Aviation at NUST during 3rd International conference on Artificial Intelligence organised by NUST National Centre of Artificial Intelligence",
+                certificateNo: "NUST-2025-001",
+                images: [
+                    "nust1.jpg",
+                    "nust2.jpg",
+                    "nust3.jpg"
+                ]
+            },
+            {
+                title: "Applications of AI, Robotics and Disruptive Technologies in Aviation Industry",
+                category: "Aviation Technology",
+                provider: "Ghulam Ishaq Khan Institute of Engineering Sciences and Technology",
+                date: "2024-03-06",
+                duration: "1 Day",
+                description: "Digital Technologies are playing an important role in improving Aviation business. Shared my views with faculty and students of Computer Science and Engineering on  \"Applications of Artificial intelligence, Robotics and other Disruptive technologies in Aviation Industry/k\" at Ghulam Ishaq Khan Institute of Engineering Sciences and Technology",
+                certificateNo: "GIKI-AVIATION-2025",
+                images: [
+                    "giki1.jpg",
+                    "giki2.jpg"
+                ]
+            },
+            {
+                title: "AI, Digital Disruption and STEM Opportunity for Women",
+                category: "AI & Digital Transformation",
+                provider: "Lahore College for Women University",
+                date: "2025-04-12",
+                duration: "1 Day",
+                description: "For sustainable development, women and girls must be given equal opportunities in the fields of science, technology, engineering, mathematics. Held discussion with Computer Science students of Lahore College for Women University on Artificial Intelligence and Digital disruptions",
+                certificateNo: "LCWU-2025-001",
+                images: [
+                    "LahoreUni1.jpg",
+                    "LahoreUni2.jpg",
+                    "LahoreUni3.jpg"
+                ]
+            },
+            {
+                title: "Digital Transformation Strategies in Aviation",
+                category: "Aviation Technology",
+                provider: "University of Engineering and Technology Lahore",
+                date: "2025-03-25",
+                duration: "1 Day",
+                description: "Interlock between big data and digital transformation is driving change to traditional business models.New data created by work processes will be analysed continuously to improve services.Held an interactive session with students of #electricalengineering of #UETLahore on digital transformation strategies in Aviation Industry.",
+                certificateNo: "UETL-2025-001",
+                images: [
+                    "uet1.jpg",
+                    "uet2.jpg",
+                    "uet3.jpg"
+                ]
+            },
+            {
+                title: "Industrial Relations in Aviation",
+                category: "Aviation Leadership",
+                provider: "Information Technology University, Punjab",
+                date: "2020",
+                duration: "1 Day",
+                description: "Always treat your employees exactly as you want them to treat your best customers  Stephen R. Covey. Discussed role of industrial relations in aviation Industry with students of school of business and management of Information Technology University,Punjab.",
+            
+                images: [
+                    "pu.jpg",
+                    "pu2.jpg",
+                    "pu3.jpg"
+                ]
+            },
+            {
+                title: "Aviation Climate Resilience and Environmental Strategy",
+                category: "Sustainability",
+                provider: "Forman Christian College University",
+                date: "2020",
+                description: "Climatechange is occurring at much higher rates than anticipated due to continuous rise in greenhouse gas(GHG) levels and its effects are evident worldwide.World must transform its energy,industry,transport,food and agriculture systems to cope with #Climatecrisis.Held discussion with #EnvironmentalSciences students of Forman Christian College University on Aviation Industry initiatives to deal with Environmental challenges.",
+                certificateNo: "FORMAN-2025-001",
+                images: [
+                    "forman1.jpg",
+                    "forman2.jpg",
+                    "forman3.jpg"
+                ]
+            },
+            {
+                title: "AI & Digital Transformation in Aviation",
+                category: "Aviation Technology",
+                provider: "LUMS School of Science and Engineering",
+                date: "2025-03-08",
+                description: "Innovative technologies are shaping up landscape of Aviation Industry. These technologies will improve business processes.Held a talk on Artificial Intelligence and Digital Transformation with Computer science students of LUMS School of Science and Engineering.",
+                images: [
+                    "lums1.jpg",
+                    "lums2.jpg",
+                    "lums3.jpg"
+                ]
+            },
+            {
+                title: "International Air Law for Civil Aviation",
+                category: "Aviation Law",
+                provider: "Punjab University Law College",
+                date: "2025-03-02",
+                description: "Safe,secure and sustainable aviation is possible only if system of rules governing international #civilaviation is implemented effectively. Held a talk on International Air Law with LLB and LLM students of #PunjabUniversity Law College,the oldest and finest seat of legal learning in the country.",
+                images: [
+                    "law1.jpg",
+                    "law2.jpg",
+                    "law3.jpg"
+                ]
+            },
+            {
+                title: "AI and Digital Transformation at GC University",
+                category: "Aviation Technology",
+                provider: "Government College University Lahore",
+                date: "2025-02-22",
+                description: "Innovative technologies are changing the landscape of aviation Industry. Visited my alma mater, GC University Lahore and held discussion with computer science students on Artificial Intelligence and Digital Transformation.",
+                images: [
+                    "gc1.jpg",
+                    "gc2.jpg",
+                    "gc3.jpg"
+                ]
+            }
+        ];
+
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const recordsContainer = document.getElementById('recordsContainer');
+        const printBtn = document.getElementById('printBtn');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+
+        let filteredData = [...trainingData];
+
+        function init() {
+            trainingData.sort((a, b) => new Date(b.date) - new Date(a.date));
+            populateCategoryOptions();
+            filterAndRender();
+            attachEventListeners();
+        }
+
+        function attachEventListeners() {
+            searchInput.addEventListener('input', filterAndRender);
+            categoryFilter.addEventListener('change', filterAndRender);
+            printBtn.addEventListener('click', () => window.print());
+        }
+
+        function populateCategoryOptions() {
+            const categories = [...new Set(trainingData.map(item => item.category))].sort();
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        function filterAndRender() {
+            const query = searchInput.value.trim().toLowerCase();
+            const category = categoryFilter.value;
+
+            filteredData = trainingData.filter(item => {
+                const matchesCategory = !category || item.category === category;
+                const matchesQuery = !query || [item.title, item.category, item.provider]
+                    .some(field => field.toLowerCase().includes(query));
+                return matchesCategory && matchesQuery;
+            });
+
+            renderRecords();
+        }
+
+        function updateProfileStats() {
+            // Profile metrics removed to simplify executive presentation.
+        }
+
+        function renderRecords() {
+            recordsContainer.innerHTML = '';
+            if (!filteredData.length) {
+                noResultsMessage.style.display = 'block';
+                return;
+            }
+            noResultsMessage.style.display = 'none';
+            filteredData.forEach((item, index) => {
+                const card = document.createElement('article');
+                card.className = 'timeline-item';
+                card.innerHTML = renderTrainingCard(item, index + 1);
+                recordsContainer.appendChild(card);
+            });
+        }
+
+        function renderTrainingCard(item, index) {
+            return `
+                <div class="timeline-marker"><span class="marker-dot"></span></div>
+                <div class="timeline-card">
+                    <div class="training-top">
+                        <div>
+                            <span class="badge badge-primary">${item.category}</span>
+                            <h3>${index}. ${item.title}</h3>
+                            <p class="provider">${item.provider}</p>
+                        </div>
+                        <div class="training-date">${formatDate(item.date)}</div>
+                    </div>
+                    <p class="training-description">${item.description}</p>
+                    <div class="gallery-grid">
+                        ${item.images.map((src, idx) => `<div class="gallery-card"><img src="${src || placeholderImage()}" alt="${item.title} photo ${idx + 1}"><div class="gallery-pill">Photo ${idx + 1}</div></div>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function placeholderImage() {
+            return 'https://via.placeholder.com/720x450/ffffff/94a3b8?text=No+Image+Available';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function getLatestTrainingYear(data) {
+            const years = data.map(item => new Date(item.date).getFullYear());
+            return years.length ? Math.max(...years) : '—';
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
