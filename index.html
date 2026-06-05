@@ -657,6 +657,14 @@
                         <option value="">All Categories</option>
                     </select>
                 </div>
+                <div class="control-group">
+                    <label for="typeFilter">Type filter</label>
+                    <select id="typeFilter">
+                        <option value="">All Types</option>
+                        <option value="Seminar">Seminars</option>
+                        <option value="Certificate">Certificates</option>
+                    </select>
+                </div>
             </div>
             <div class="button-group">
                 <button class="btn btn-primary" id="printBtn">Print Portfolio</button>
@@ -698,7 +706,7 @@
         const trainingData = [
             {
                 title: "AI & Digital Transformation in Aviation",
-                category: "AI & Aviation",
+                category: "Artificial Intelligence",
                 provider: "NUST National Centre of Artificial Intelligence",
                 date: "2025-06-05",
                 duration: "1 Day",
@@ -712,7 +720,7 @@
             },
             {
                 title: "Applications of AI, Robotics and Disruptive Technologies in Aviation Industry",
-                category: "Aviation Technology",
+                category: "Aviation",
                 provider: "Ghulam Ishaq Khan Institute of Engineering Sciences and Technology",
                 date: "2024-03-06",
                 duration: "1 Day",
@@ -725,7 +733,7 @@
             },
             {
                 title: "AI, Digital Disruption and STEM Opportunity for Women",
-                category: "AI & Digital Transformation",
+                category: "Artificial Intelligence",
                 provider: "Lahore College for Women University",
                 date: "2025-04-12",
                 duration: "1 Day",
@@ -738,22 +746,21 @@
                 ]
             },
             {
-                title: "Digital Transformation Strategies in Aviation",
-                category: "Aviation Technology",
-                provider: "University of Engineering and Technology Lahore",
-                date: "2025-03-25",
+                title: "Airport Ecosystem and Operational Management",
+                category: "Aviation",
+                provider: "PAA APM / CEO OPIS",
+                date: "2025-05-22",
                 duration: "1 Day",
-                description: "Interlock between big data and digital transformation is driving change to traditional business models.New data created by work processes will be analysed continuously to improve services.Held an interactive session with students of #electricalengineering of #UETLahore on digital transformation strategies in Aviation Industry.",
-                certificateNo: "UETL-2025-001",
+                description: "Thanks to PAA APM / CEO OPIS for enlightening the students on airport ecosystem and operational management.",
                 images: [
-                    "uet1.jpg",
-                    "uet2.jpg",
-                    "uet3.jpg"
+                    "ptm1.jpg",
+                    "ptm2.jpg",
+                    "ptm4.jpg"
                 ]
             },
             {
                 title: "Industrial Relations in Aviation",
-                category: "Aviation Leadership",
+                category: "Aviation",
                 provider: "Information Technology University, Punjab",
                 date: "2020",
                 duration: "1 Day",
@@ -805,7 +812,7 @@
             },
             {
                 title: "AI & Digital Transformation in Aviation",
-                category: "Aviation Technology",
+                category: "Aviation",
                 provider: "LUMS School of Science and Engineering",
                 date: "2025-03-08",
                 description: "Innovative technologies are shaping up landscape of Aviation Industry. These technologies will improve business processes.Held a talk on Artificial Intelligence and Digital Transformation with Computer science students of LUMS School of Science and Engineering.",
@@ -817,7 +824,7 @@
             },
             {
                 title: "International Air Law for Civil Aviation",
-                category: "Aviation Law",
+                category: "Aviation",
                 provider: "Punjab University Law College",
                 date: "2025-03-02",
                 description: "Safe,secure and sustainable aviation is possible only if system of rules governing international #civilaviation is implemented effectively. Held a talk on International Air Law with LLB and LLM students of #PunjabUniversity Law College,the oldest and finest seat of legal learning in the country.",
@@ -829,7 +836,7 @@
             },
             {
                 title: "AI and Digital Transformation at GC University",
-                category: "Aviation Technology",
+                category: "Aviation",
                 provider: "Government College University Lahore",
                 date: "2025-02-22",
                 description: "Innovative technologies are changing the landscape of aviation Industry. Visited my alma mater, GC University Lahore and held discussion with computer science students on Artificial Intelligence and Digital Transformation.",
@@ -838,11 +845,167 @@
                     "gc2.jpg",
                     "gc3.jpg"
                 ]
+            },
+            {
+                title: "Digital Transformation at ITU Lahore",
+                category: "Aviation",
+                provider: "Information Technology University, Lahore",
+                date: "2021-06-10",
+                duration: "1 Day",
+                description: "Innovative technologies will improve business processes and operations in aviation Industry. Held an interactive session with students of Information Technology University (ITU), Lahore about Digital Transformation.",
+                images: [
+                    "itu-1.jpg",
+                    "itu-2.jpg",
+                    "itu-3.jpg"
+                ]
+            },
+            {
+                title: "Informal Economies and Aviation Industry Initiatives",
+                category: "Aviation",
+                provider: "Government College University Lahore",
+                date: "2025",
+                duration: "1 Day",
+                description: "Held an interactive session with GC University Lahore, Economics Department students on informal and illegal economies, challenges and Aviation Industry initiatives.",
+                images: [
+                    "gc-eco1.jpg",
+                    "gc-eco2.jpg",
+                    "gc-eco3.jpg"
+                ]
+            },
+            {
+                title: "Emerging Technologies for Air Traffic Growth",
+                category: "Aviation",
+                provider: "Punjab University Electrical Engineering Department",
+                date: "2025",
+                duration: "1 Day",
+                description: "Held an interactive session with Punjab University Electrical Engineering Department students and faculty on emerging technologies in Aviation Industry to handle exponential growth of global air traffic in a safe, secure and sustainable manner.",
+                images: [
+                    "pu-1.jpg",
+                    "pu-2.jpg",
+                    "pu-3.jpg"
+                ]
+            },
+            {
+                title: "Climate Emergency and Women in Aviation",
+                category: "Sustainability",
+                provider: "Lahore College for Women University",
+                date: "2025",
+                duration: "1 Day",
+                description: "Educating a girl means educating a generation. Climate emergency and environmental crisis cannot be tackled without active participation of females, which constitute 50% of society. Discussed Aviation Industry's eco-friendly initiatives with environmental science students of Lahore College For Women University.",
+                images: [
+                    "Lhrclg1.jpg",
+                    "Lhrclg2.jpg",
+                    "Lhrclg3.jpg"
+                ]
+            },
+            {
+                title: "ECO Friendly Aviation Initiatives at Kinnaird College",
+                category: "Sustainability",
+                provider: "Kinnaird College for Women, Lahore",
+                date: "2025",
+                duration: "1 Day",
+                description: "Today challenge is no longer to conquer the Moon, but to conquer quality of life on Earth. This is possible only if challenges to environment and climate change are addressed effectively. Discussed eco-friendly initiatives in Aviation Industry with environmental science students of Kinnaird College for Women, Lahore.",
+                images: [
+                    "kinard1.jpg",
+                    "kinard2.jpg"
+                ]
+            },
+            {
+                title: "AI and Blockchain in Aviation at COMSATS",
+                category: "Aviation",
+                provider: "COMSATS University Islamabad, Lahore campus",
+                date: "2025",
+                duration: "1 Day",
+                description: "Modern technologies are improving business processes and changing landscape of aviation industry. Held talk with Computer Science students of COMSATS University Islamabad, Lahore campus on Artificial Intelligence and Blockchain Technology in Aviation Industry.",
+                images: [
+                    "comsats1.jpg",
+                    "comsats2.jpg",
+                    "comsats3.jpg"
+                ]
+            },
+            {
+                title: "Emerging Trends of Airport Engineering",
+                category: "Aviation",
+                provider: "University of Lahore",
+                date: "2025",
+                duration: "1 Day",
+                description: "Development of quality and sustainable airport infrastructure is essential for efficient service delivery and growth of aviation. Held discussion on emerging trends of airport engineering with Civil Engineering students of University of Lahore.",
+                images: [
+                    "uet--1.jpg",
+                    "uet--2.jpg",
+                    "uet--3.jpg"
+                ]
+            },
+            {
+                title: "Air Transport Liberalization at LUMS",
+                category: "Aviation",
+                provider: "LUMS Suleman Dawood School of Business",
+                date: "2025",
+                duration: "1 Day",
+                description: "Held an interactive session with MBA students of #LUMS Suleman Dawood School of Business on air transport liberalization and its impacts on Airline Industry.",
+                images: [
+                    "lumsmba1.jpg",
+                    "lumsmba2.jpg",
+                    "lumsmba3.jpg"
+                ]
+            },
+            {
+                title: "ECO Friendly Policies and CORSIA Discussion",
+                category: "Sustainability",
+                provider: "Punjab University Institute of Earth and Environmental Sciences",
+                date: "2025",
+                duration: "1 Day",
+                description: "Held discussion with students of Punjab University Institute of Earth and Environmental Sciences on ECO friendly policies and initiatives of Aviation Industry to deal with climate change. Also discussed with students ICAO initiative of CORSIA.",
+                images: [
+                    "punjab1.jpg",
+                    "punjab2.jpg",
+                    "punjab3.jpg"
+                ]
+            },
+            {
+                title: "Environmental Footprint Reduction at GC University",
+                category: "Sustainability",
+                provider: "Sustainable Development Study Centre, GC University Lahore",
+                date: "2025",
+                duration: "1 Day",
+                description: "Discussed Aviation Industry initiatives to reduce environmental footprint with students of Sustainable Development Study Centre GC University Lahore.",
+                images: [
+                    "ravian1.jpg",
+                    "ravian2.jpg",
+                    "ravian3.jpg"
+                ]
+            },
+            {
+                title: "Quality of Governance Panel at Punjab University",
+                category: "Public Policy",
+                provider: "Punjab University Institute of Administrative Sciences",
+                date: "2025",
+                duration: "1 Day",
+                description: "As a part of academic excellence activities, Punjab University Institute of Administrative Sciences organized a panel discussion/seminar on Quality of Governance in the age of Complexity for MPhil/PhD students. Expressed my thoughts on Public Policy and Governance.",
+                images: [
+                    "pun1.jpg",
+                    "pun2.jpg",
+                    "pun3.jpg"
+                ]
+            },
+            {
+                title: "Governance and Competitiveness Learning from LKYSPP",
+                category: "Public Policy",
+                provider: "Lee Kuan Yew School of Public Policy, National University of Singapore",
+                date: "06-05-2025",
+                duration: "1 Day",
+                description: "Lee Kuan Yew School of Public Policy (LKYSPP), National University of Singapore has been playing an important role in improving standards of governance and transforming lives for a more sustainable world through Public Policy Studies & Programmes. It has always been a great learning from Dr Tan Khee Giap, Co-Director Asia Competitiveness Institute, LKYSPP, National University of Singapore on economic policies and competitiveness.",
+                images: [
+                    "singapore1.jpg",
+                    "singapore2.jpg",
+                    "singapore3.jpg"
+                ]
             }
         ];
 
         const searchInput = document.getElementById('searchInput');
         const categoryFilter = document.getElementById('categoryFilter');
+        const typeFilter = document.getElementById('typeFilter');
         const recordsContainer = document.getElementById('recordsContainer');
         const printBtn = document.getElementById('printBtn');
         const noResultsMessage = document.getElementById('noResultsMessage');
@@ -850,6 +1013,7 @@
         let filteredData = [...trainingData];
 
         function init() {
+            trainingData.forEach(item => { if (!item.type) item.type = 'Seminar'; });
             trainingData.sort((a, b) => new Date(b.date) - new Date(a.date));
             populateCategoryOptions();
             filterAndRender();
@@ -859,6 +1023,7 @@
         function attachEventListeners() {
             searchInput.addEventListener('input', filterAndRender);
             categoryFilter.addEventListener('change', filterAndRender);
+            typeFilter.addEventListener('change', filterAndRender);
             printBtn.addEventListener('click', () => window.print());
         }
 
@@ -875,12 +1040,14 @@
         function filterAndRender() {
             const query = searchInput.value.trim().toLowerCase();
             const category = categoryFilter.value;
+            const type = typeFilter.value;
 
             filteredData = trainingData.filter(item => {
                 const matchesCategory = !category || item.category === category;
+                const matchesType = !type || item.type === type;
                 const matchesQuery = !query || [item.title, item.category, item.provider]
                     .some(field => field.toLowerCase().includes(query));
-                return matchesCategory && matchesQuery;
+                return matchesCategory && matchesType && matchesQuery;
             });
 
             renderRecords();
