@@ -1155,7 +1155,6 @@
 
         function init() {
             trainingData.forEach(item => { if (!item.type) item.type = 'Seminar'; });
-            trainingData.sort((a, b) => new Date(b.date) - new Date(a.date));
             populateCategoryOptions();
             filterAndRender();
             attachEventListeners();
@@ -1205,11 +1204,35 @@
                 return;
             }
             noResultsMessage.style.display = 'none';
-            filteredData.forEach((item, index) => {
-                const card = document.createElement('article');
-                card.className = 'timeline-item';
-                card.innerHTML = renderTrainingCard(item, index + 1);
-                recordsContainer.appendChild(card);
+
+            // Group by category and sort by date within each category
+            const groupedByCategory = {};
+            filteredData.forEach(item => {
+                if (!groupedByCategory[item.category]) {
+                    groupedByCategory[item.category] = [];
+                }
+                groupedByCategory[item.category].push(item);
+            });
+
+            // Sort each category by date (newest to oldest)
+            Object.keys(groupedByCategory).forEach(category => {
+                groupedByCategory[category].sort((a, b) => new Date(b.date) - new Date(a.date));
+            });
+
+            // Sort categories alphabetically
+            const sortedCategories = Object.keys(groupedByCategory).sort();
+
+            let globalIndex = 1;
+            sortedCategories.forEach(category => {
+                const categoryItems = groupedByCategory[category];
+                
+                categoryItems.forEach((item) => {
+                    const card = document.createElement('article');
+                    card.className = 'timeline-item';
+                    card.innerHTML = renderTrainingCard(item, globalIndex);
+                    recordsContainer.appendChild(card);
+                    globalIndex++;
+                });
             });
         }
 
