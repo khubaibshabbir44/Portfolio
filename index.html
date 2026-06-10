@@ -48,9 +48,9 @@
 
         .controls-section {
             display: grid;
-            grid-template-columns: 1fr auto;
+            grid-template-columns: 1fr;
             gap: 16px;
-            align-items: end;
+            align-items: stretch;
             margin-bottom: 24px;
         }
 
@@ -386,7 +386,7 @@
         }
 
         .provider {
-            color: var(--text-muted);
+            color: var(--indigo);
             font-size: 0.96rem;
             margin-bottom: 6px;
         }
@@ -666,9 +666,6 @@
                     </select>
                 </div>
             </div>
-            <div class="button-group">
-                <button class="btn btn-primary" id="printBtn">Print Portfolio</button>
-            </div>
         </div>
 
         <section class="hero-section">
@@ -706,7 +703,7 @@
         const trainingData = [
             {
                 title: "AI & Digital Transformation in Aviation",
-                category: "Artificial Intelligence",
+                category: "AI and Digital transformation in aviation",
                 provider: "National Centre of Artificial Intelligence, NUST",
                 date: "2025-06-05",
                 duration: "1 Day",
@@ -734,7 +731,7 @@
             },
             {
                 title: "AI, Digital Disruption and STEM Opportunity for Women",
-                category: "Artificial Intelligence",
+                category: "AI and Digital transformation in aviation",
                 provider: "Lahore College for Women University",
                 date: "2025-04-12",
                 duration: "1 Day",
@@ -787,7 +784,7 @@
             },
             {
                 title: "Climate Action and Aviation Sustainability",
-                category: "Climate Action",
+                category: "Environment Impact on Aviation",
                 provider: "UET Lahore",
                 date: "2019-05-15",
                 duration: "1 Day",
@@ -991,7 +988,7 @@
             },
             {
                 title: "Conventional and Satellite Surveillance Systems",
-                category: "Air Traffic Management",
+                category: "Communication and Navigation Services",
                 provider: "School of Electrical Engineering and Computer Science, NUST",
                 date: "2025",
                 duration: "1 Day",
@@ -1184,7 +1181,7 @@
             },
             {
                 title: "Emerging Technologies for Global Air Traffic (UET Lahore)",
-                category: "Air Traffic Management",
+                category: "Communication and Navigation Services",
                 provider: "Electrical Engineering Department, UET Lahore",
                 date: "2025",
                 duration: "1 Day",
@@ -1253,7 +1250,6 @@
         const categoryFilter = document.getElementById('categoryFilter');
         const typeFilter = document.getElementById('typeFilter');
         const recordsContainer = document.getElementById('recordsContainer');
-        const printBtn = document.getElementById('printBtn');
         const noResultsMessage = document.getElementById('noResultsMessage');
 
         let filteredData = [...trainingData];
@@ -1269,7 +1265,6 @@
             searchInput.addEventListener('input', filterAndRender);
             categoryFilter.addEventListener('change', filterAndRender);
             typeFilter.addEventListener('change', filterAndRender);
-            printBtn.addEventListener('click', () => window.print());
         }
 
         function populateCategoryOptions() {
