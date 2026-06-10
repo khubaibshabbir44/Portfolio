@@ -391,6 +391,20 @@
             margin-bottom: 6px;
         }
 
+        .category-heading {
+            grid-column: 1 / -1;
+            padding: 8px 16px;
+            border-radius: 18px;
+            background: rgba(37, 99, 235, 0.1);
+            margin: 16px 0 8px;
+        }
+
+        .category-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--indigo);
+        }
+
         .training-date {
             font-family: Inter, sans-serif;
             color: var(--indigo);
@@ -677,7 +691,8 @@
                     
                     <h1>Syed Aftab Gillani</h1>
                     <p class="title">Chief Operating Officer, Islamabad International Airport</p>
-                    <p class="lead">A distinguished aviation leader currently serving as the Chief Operating Officer at Islamabad International Airport. With a deep expertise in driving airport operations and modernization, he stands at the forefront of digital transformation, actively integrating artificial intelligence, robotics, and next-generation technologies into the aviation industry.</p>
+                    <p class="lead">MBA in Operations Management from LUMS, M.Sc. in Physics from GC University Lahore, Basic Air Traffic Control Course from CATI Institute Hyderabad and specialized certifications in Civil Aviation Management, Aviation Policy, and Public Policy from renowned institutions in Singapore and South Korea.</p>
+                    <p class="lead">Committed to advancing Airport Operations through innovation, efficiency, and continuous improvement, while fostering a culture of safety, service excellence, and sustainable growth.</p>
                 </div>
             </div>
         </section>
@@ -771,11 +786,11 @@
             },
             {
                 title: "Digital Economy and Youth Innovation",
-                category: "Digital Economy",
+                category: "AI and Digital transformation in aviation",
                 provider: "Information Technology University, Punjab",
                 date: "2023-05-10",
                 duration: "1 Day",
-                description: "Pakistani youth has a great potential of developing digital technologies. Digital economy is the future of #Pakistan. Visited digital technology labs of Information Technology University Punjab (ITU) and saw innovative works of young students.",
+                description: "Pakistani youth has a great potential of developing digital technologies. Digital economy is the future of Pakistan. Visited digital technology labs of Information Technology University Punjab (ITU) and saw innovative works of young students.",
                 images: [
                     "ITU1.jpg",
                     "ITU2.jpg",
@@ -784,7 +799,7 @@
             },
             {
                 title: "Climate Action and Aviation Sustainability",
-                category: "Environment Impact on Aviation",
+                category: "Sustainability",
                 provider: "UET Lahore",
                 date: "2019-05-15",
                 duration: "1 Day",
@@ -1039,7 +1054,7 @@
             },
             {
                 title: "FRMUN Chief Guest Address",
-                category: "Education",
+                category: "Aviation",
                 provider: "PAF Fazaia College Risalpur",
                 date: "2025",
                 duration: "1 Day",
@@ -1065,7 +1080,7 @@
             },
             {
                 title: "Aviation Meteorology Workshop",
-                category: "Meteorology",
+                category: "Flight Safety",
                 provider: "Pakistan Meteorological Department",
                 date: "2025",
                 duration: "1 Day",
@@ -1220,7 +1235,7 @@
             },
             {
                 title: "CNS Systems and the Changing Aviation Landscape (LUMS)",
-                category: "Air Traffic Management",
+                category: "Communication and Navigation Services",
                 provider: "Syed Babar Ali School of Science and Engineering, LUMS",
                 date: "2025",
                 duration: "1 Day",
@@ -1324,8 +1339,12 @@
 
             let globalIndex = 1;
             sortedCategories.forEach(category => {
+                const categoryHeading = document.createElement('div');
+                categoryHeading.className = 'category-heading';
+                categoryHeading.innerHTML = `<h3 class="category-title">${category}</h3>`;
+                recordsContainer.appendChild(categoryHeading);
+
                 const categoryItems = groupedByCategory[category];
-                
                 categoryItems.forEach((item) => {
                     const card = document.createElement('article');
                     card.className = 'timeline-item';
