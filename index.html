@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -191,27 +191,28 @@
         .hero-inner {
             position: relative;
             display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 32px;
+            grid-template-columns: 260px minmax(0, 1fr);
+            gap: 34px;
             align-items: center;
         }
 
         .hero-photo {
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.22), rgba(15, 23, 42, 0.18));
+            width: 240px;
+            height: 280px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(15, 23, 42, 0.18));
             display: grid;
             place-items: center;
             border: 1px solid rgba(255, 255, 255, 0.16);
             box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+            overflow: hidden;
         }
 
         .hero-photo img {
-            width: 196px;
-            height: 196px;
+            width: calc(100% - 18px);
+            height: calc(100% - 18px);
             object-fit: cover;
-            border-radius: 50%;
+            border-radius: 22px;
             border: 4px solid rgba(255, 255, 255, 0.28);
         }
 
@@ -251,10 +252,20 @@
         }
 
         .hero-copy p.lead {
-            max-width: 760px;
             font-size: 1rem;
             color: rgba(255, 255, 255, 0.82);
+        }
+
+        .profile-summary {
+            max-width: 860px;
+            display: grid;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 22px;
+            padding: 18px 20px;
             margin-bottom: 18px;
+            backdrop-filter: blur(10px);
         }
 
         .hero-kpis {
@@ -570,6 +581,104 @@
             z-index: 0;
         }
 
+        .intro-actions {
+            margin-top: 18px;
+        }
+
+        .education-return {
+            display: flex;
+            justify-content: center;
+            margin-top: 18px;
+        }
+
+        .profile-collapse-btn {
+            display: inline-grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--indigo), var(--blue));
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 12px 26px rgba(37, 99, 235, 0.18);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .profile-collapse-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
+        }
+
+        .profile-collapse-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2.4;
+        }
+
+        .profile-details {
+            margin-top: 22px;
+            background: rgba(255, 255, 255, 0.96);
+            color: var(--text);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18);
+        }
+
+        .profile-details .section-header {
+            margin-bottom: 16px;
+        }
+
+        .education-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        .education-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.04);
+        }
+
+        .education-card h4 {
+            margin-bottom: 12px;
+            color: var(--indigo);
+            font-size: 1.05rem;
+        }
+
+        .education-card .edu-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .education-card .gallery-card {
+            min-height: 220px;
+            height: 220px;
+            border-radius: 12px;
+            box-shadow: none;
+        }
+
+        .education-card .gallery-card img {
+            height: 100%;
+        }
+
+        .edu-caption {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .edu-year {
+            font-weight: 700;
+            color: var(--indigo);
+            margin-bottom: 8px;
+        }
+
         .watermark span {
             position: absolute;
             top: 50%;
@@ -639,7 +748,7 @@
 
             .hero-inner {
                 grid-template-columns: 1fr;
-                text-align: center;
+                text-align: left;
             }
 
             .hero-photo {
@@ -648,6 +757,10 @@
 
             .dashboard-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .education-list {
+                grid-template-columns: 1fr;
             }
 
             .timeline-item {
@@ -684,6 +797,23 @@
 
             .hero-copy h1 {
                 font-size: 2.4rem;
+            }
+
+            .hero-photo {
+                width: 100%;
+                max-width: 240px;
+                height: 260px;
+            }
+
+            .profile-summary,
+            .profile-details {
+                padding: 16px;
+                border-radius: 18px;
+            }
+
+            .education-card .gallery-card {
+                min-height: 180px;
+                height: 180px;
             }
 
             .timeline-item {
@@ -749,8 +879,81 @@
                     
                     <h1>Syed Aftab Gillani</h1>
                     <p class="title">Chief Operating Officer, Islamabad International Airport</p>
-                    <p class="lead">MBA in Operations Management from LUMS, M.Sc. in Physics from GC University Lahore, Basic Air Traffic Control Course from CATI Institute Hyderabad and specialized certifications in Civil Aviation Management, Aviation Policy, and Public Policy from renowned institutions in Singapore and South Korea.</p>
-                    <p class="lead">Committed to advancing Airport Operations through innovation, efficiency, and continuous improvement, while fostering a culture of safety, service excellence, and sustainable growth.</p>
+                    <div class="profile-summary">
+                        <p class="lead">MBA in Operations Management from LUMS, M.Sc. in Physics from GC University Lahore, Basic Air Traffic Control Course from CATI Institute Hyderabad and specialized certifications in Civil Aviation Management, Aviation Policy, and Public Policy from renowned institutions in Singapore and South Korea.</p>
+                        <p class="lead">Committed to advancing Airport Operations through innovation, efficiency, and continuous improvement, while fostering a culture of safety, service excellence, and sustainable growth.</p>
+                    </div>
+                    <div class="intro-actions">
+                        <button id="showMoreBtn" class="btn btn-primary">Detail Profile</button>
+                    </div>
+                    <section id="profileSection" class="profile-details" style="display:none;">
+                        <div class="section-header">
+                            <h2>Profile & Education</h2>
+                        </div>
+                        <div class="education-list">
+                            <div class="education-card">
+                                <h4>1. Lahore University of Management Sciences</h4>
+                                <div class="edu-detail edu-caption">Master of Business Administration (MBA), Operations management</div>
+                                <div class="edu-year">2010 - 2012</div>
+                                <div class="edu-images">
+                                    <div class="gallery-card"><img src="lumsconvo1.jpg" alt="LUMS 1"></div>
+                                    <div class="gallery-card"><img src="lumsconvo2.jpg" alt="LUMS 2"></div>
+                                   
+                                </div>
+                            </div>
+
+                            <div class="education-card">
+                                <h4>2. Lee Kuan Yew School of Public Policy</h4>
+                                <div class="edu-detail edu-caption">Public Policy program - Public Policy</div>
+                                <div class="edu-year">2017 - 2018</div>
+                                <div class="edu-images">
+                                    <div class="gallery-card"><img src="(LKYSPP).png" alt="LKYSPP 1"></div>
+                                    <div class="gallery-card"><img src="(LKYSPP)1.jpg" alt="LKYSPP 2"></div>
+                                    
+                                </div>
+                            </div>
+
+                            <div class="education-card">
+                                <h4>3. Singapore</h4>
+                                <div class="edu-detail edu-caption">Civil Aviation Management, Airports and Airlines management</div>
+                                <div class="edu-year">2014 - 2015</div>
+                                <div class="edu-images">
+                                    <div class="gallery-card"><img src="CivilAviationManagementProgramSingapore.jpg" alt="Singapore 1"></div>
+                                    <div class="gallery-card"><img src="SingaporeCivilAviationManagement.jpg" alt="Singapore 2"></div>
+                                </div>
+                            </div>
+
+                            <div class="education-card">
+                                <h4>4. South Korea</h4>
+                                <div class="edu-detail edu-caption">Aviation Policy for Executives</div>
+                                <div class="edu-year">2014</div>
+                                <div class="edu-images">
+                                    <div class="gallery-card"><img src="AviationPolicySouthKorea.jpg" alt="South Korea 1"></div>
+                                    
+                                </div>
+                            </div>
+
+                         
+
+                            <div class="education-card">
+                                <h4>5. GC University Lahore</h4>
+                                <div class="edu-detail edu-caption">Master of Science (M.Sc.), Physics</div>
+                                <div class="edu-year">1992 - 1994</div>
+                                <div class="edu-images">
+                                    <div class="gallery-card"><img src="gcconvo1.jpg" alt="GC 1"></div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="education-return">
+                            <button id="hideProfileBtn" class="profile-collapse-btn" type="button" title="Return to profile" aria-label="Return to profile">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M18 15l-6-6-6 6"></path>
+                                </svg>
+                                <span class="sr-only">Return to profile</span>
+                            </button>
+                        </div>
+                    </section>
                 </div>
             </div>
         </section>
@@ -819,22 +1022,82 @@
             return [item.title, item.provider, item.date].join('|').toLowerCase();
         }
 
+        function getSemanticRecordKey(item) {
+            return [item.title, item.provider].join('|').toLowerCase();
+        }
+
+        function dateSpecificity(dateString) {
+            if (dateString === '2000') {
+                return 0;
+            }
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+                return 3;
+            }
+            if (/^\d{4}$/.test(dateString)) {
+                return 2;
+            }
+            return 1;
+        }
+
+        function pickPreferredRecord(current, candidate) {
+            const currentScore = dateSpecificity(current.date);
+            const candidateScore = dateSpecificity(candidate.date);
+            if (candidateScore !== currentScore) {
+                return candidateScore > currentScore ? candidate : current;
+            }
+
+            const currentImages = (current.images || []).length;
+            const candidateImages = (candidate.images || []).length;
+            if (candidateImages !== currentImages) {
+                return candidateImages > currentImages ? candidate : current;
+            }
+
+            return candidate;
+        }
+
+        function deduplicateTrainingRecords(records) {
+            const merged = new Map();
+            const orderedKeys = [];
+
+            records.forEach(record => {
+                const key = getSemanticRecordKey(record);
+                if (!merged.has(key)) {
+                    merged.set(key, record);
+                    orderedKeys.push(key);
+                    return;
+                }
+                merged.set(key, pickPreferredRecord(merged.get(key), record));
+            });
+
+            return orderedKeys.map(key => merged.get(key));
+        }
+
         function mergeTrainingRecords(defaultRecords, savedRecords) {
-            const savedByKey = new Map(savedRecords.map(record => [getRecordKey(record), record]));
-            const defaultKeys = new Set(defaultRecords.map(getRecordKey));
+            const savedByExactKey = new Map(savedRecords.map(record => [getRecordKey(record), record]));
+            const defaultSemanticKeys = new Set(defaultRecords.map(getSemanticRecordKey));
+
             const merged = defaultRecords.map(defaultRecord => {
-                const key = getRecordKey(defaultRecord);
-                return savedByKey.get(key) || defaultRecord;
+                const exactKey = getRecordKey(defaultRecord);
+                if (savedByExactKey.has(exactKey)) {
+                    return savedByExactKey.get(exactKey);
+                }
+
+                const semanticMatch = savedRecords.find(record =>
+                    getSemanticRecordKey(record) === getSemanticRecordKey(defaultRecord)
+                );
+
+                return semanticMatch
+                    ? pickPreferredRecord(defaultRecord, semanticMatch)
+                    : defaultRecord;
             });
 
             savedRecords.forEach(record => {
-                const key = getRecordKey(record);
-                if (!defaultKeys.has(key)) {
+                if (!defaultSemanticKeys.has(getSemanticRecordKey(record))) {
                     merged.push(record);
                 }
             });
 
-            return merged;
+            return deduplicateTrainingRecords(merged);
         }
 
         function getDefaultTrainingData() {
@@ -1092,9 +1355,9 @@
                 title: "Air Transport Liberalization at LUMS",
                 category: "Aviation Management",
                 provider: "Suleman Dawood School of Business, LUMS",
-                date: "2019-10-20",
+                date: "2019-10-11",
                 duration: "1 Day",
-                description: "Held an interactive session with MBA students of #LUMS Suleman Dawood School of Business on air transport liberalization and its impacts on Airline Industry.",
+                description: "Held an interactive session with MBA students of LUMS Suleman Dawood School of Business on air transport liberalization and its impacts on Airline Industry.",
                 images: [
                     "lumsmba1.jpg",
                     "lumsmba2.jpg",
@@ -1232,7 +1495,7 @@
                 title: "ECO Friendly Policies and CORSIA Discussion",
                 category: "Sustainability",
                 provider: "Institute of Earth and Environmental Sciences, Punjab University Lahore",
-                date: "2000",
+                date: "2019-09-20",
                 duration: "1 Day",
                 description: "Held discussion with students of Punjab University Institute of Earth and Environmental Sciences on ECO friendly policies and initiatives of Aviation Industry to deal with climate change. Also discussed with students ICAO initiative of CORSIA.",
                 images: [
@@ -1245,7 +1508,7 @@
                 title: "Environmental Footprint Reduction at GC University",
                 category: "Sustainability",
                 provider: "Sustainable Development Study Centre, GC University Lahore",
-                date: "2019-11-08",
+                date: "2019-10-05",
                 duration: "1 Day",
                 description: "Discussed Aviation Industry initiatives to reduce environmental footprint with students of Sustainable Development Study Centre GC University Lahore.",
                 images: [
@@ -1258,7 +1521,7 @@
                 title: "Quality of Governance Panel at Punjab University",
                 category: "Aviation Law and Policy",
                 provider: "Institute of Administrative Sciences, Punjab University Lahore",
-                date: "2019",
+                date: "2019-07-06",
                 duration: "1 Day",
                 description: "As a part of academic excellence activities, Punjab University Institute of Administrative Sciences organized a panel discussion/seminar on Quality of Governance in the age of Complexity for MPhil/PhD students. Expressed my thoughts on Public Policy and Governance.",
                 images: [
@@ -1323,7 +1586,7 @@
                 title: "Emerging Technologies for Global Air Traffic (UET Lahore)",
                 category: "Communication and Navigation Services",
                 provider: "Electrical Engineering Department, UET Lahore",
-                date: "2019",
+                date: "2019-04-29",
                 duration: "1 Day",
                 description: "Global Air Traffic is growing fast. It poses challenges to Aviation Industry in terms of safety, efficiency and capacity. In order to cope with these challenges, new technologies are being introduced in Industry. Discussed role of emerging technologies in changing landscape of Aviation Industry with students of Electrical Engineering, University of Engineering and Technology (UET) Lahore.",
                 images: [
@@ -1336,7 +1599,7 @@
                 title: "Emerging Technologies in Aviation at GC University Lahore",
                 category: "Communication and Navigation Services",
                 provider: "Electrical Engineering Department, GC University Lahore",
-                date: "2025",
+                date: "2019-04-27",
                 duration: "1 Day",
                 description: "Visited my alma mater GC University Lahore and held discussion with students and faculty of Electrical Engineering Department of GC University Lahore on Emerging Technologies in Aviation Industry for Global Air Traffic Management. It was a great pleasure to see Honorable Syed Hassan Amir Shah - Vice Chancellor GC University Lahore.",
                 images: [
@@ -1402,12 +1665,42 @@
             populateCategoryOptions();
             filterAndRender();
             attachEventListeners();
+            setupShowMoreToggle();
         }
 
         function attachEventListeners() {
             searchInput.addEventListener('input', filterAndRender);
             categoryFilter.addEventListener('change', filterAndRender);
             typeFilter.addEventListener('change', filterAndRender);
+        }
+
+        // Toggle profile details from the hero and education section.
+        function setupShowMoreToggle() {
+            const btn = document.getElementById('showMoreBtn');
+            const hideBtn = document.getElementById('hideProfileBtn');
+            const profile = document.getElementById('profileSection');
+            if (!btn || !profile) return;
+
+            const showProfile = () => {
+                profile.style.display = 'block';
+                btn.textContent = 'Hide Profile';
+                profile.scrollIntoView({ behavior: 'smooth' });
+            };
+
+            const hideProfile = () => {
+                profile.style.display = 'none';
+                btn.textContent = 'Detail Profile';
+                btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            };
+
+            btn.addEventListener('click', () => {
+                const hidden = profile.style.display === 'none' || profile.style.display === '';
+                hidden ? showProfile() : hideProfile();
+            });
+
+            if (hideBtn) {
+                hideBtn.addEventListener('click', hideProfile);
+            }
         }
 
         function populateCategoryOptions() {

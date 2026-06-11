@@ -954,6 +954,48 @@
             box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
         }
 
+        .new-category-panel {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 14px;
+            border-radius: 16px;
+            background: rgba(37, 99, 235, 0.06);
+            border: 1px dashed rgba(37, 99, 235, 0.28);
+        }
+
+        .new-category-panel.show {
+            display: flex;
+        }
+
+        .new-category-panel label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--indigo);
+            margin: 0;
+        }
+
+        .new-category-add-btn {
+            align-self: flex-start;
+            min-width: 168px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--indigo), var(--blue));
+            color: #fff;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .new-category-add-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 28px rgba(37, 99, 235, 0.28);
+        }
+
         .form-actions {
             display: flex;
             gap: 12px;
@@ -1198,7 +1240,11 @@
                                     <option value="__new__">+ Add New Category</option>
                                 </select>
                             </div>
-                            <input type="text" id="seminarCategoryNew" class="form-select" placeholder="Enter new category name" style="display: none; margin-top: 8px;">
+                            <div class="new-category-panel" id="newCategoryPanel">
+                                <label for="seminarCategoryNew">New category name</label>
+                                <input type="text" id="seminarCategoryNew" class="form-select" placeholder="Enter new category name">
+                                <button type="button" class="new-category-add-btn" onclick="confirmNewCategory()">Add Category</button>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="seminarProvider">Provider/Organization *</label>
@@ -1378,6 +1424,7 @@
             loadRecords();
             populateCategoryDropdown();
             setupImagePickers();
+            bindCategoryDropdownEvents();
         }
 
         function setupImagePickers() {
@@ -1541,8 +1588,63 @@
             }
         }
 
+        function getSemanticRecordKey(item) {
+            return [item.title, item.provider].join('|').toLowerCase();
+        }
+
+        function dateSpecificity(dateString) {
+            if (dateString === '2000') {
+                return 0;
+            }
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+                return 3;
+            }
+            if (/^\d{4}$/.test(dateString)) {
+                return 2;
+            }
+            return 1;
+        }
+
+        function pickPreferredRecord(current, candidate) {
+            const currentScore = dateSpecificity(current.date);
+            const candidateScore = dateSpecificity(candidate.date);
+            if (candidateScore !== currentScore) {
+                return candidateScore > currentScore ? candidate : current;
+            }
+
+            const currentImages = (current.images || []).length;
+            const candidateImages = (candidate.images || []).length;
+            if (candidateImages !== currentImages) {
+                return candidateImages > currentImages ? candidate : current;
+            }
+
+            return candidate;
+        }
+
+        function deduplicateTrainingRecords(records) {
+            const merged = new Map();
+            const orderedKeys = [];
+
+            records.forEach(record => {
+                const key = getSemanticRecordKey(record);
+                if (!merged.has(key)) {
+                    merged.set(key, record);
+                    orderedKeys.push(key);
+                    return;
+                }
+                merged.set(key, pickPreferredRecord(merged.get(key), record));
+            });
+
+            return orderedKeys.map(key => merged.get(key));
+        }
+
         function loadRecords() {
-            allRecords = JSON.parse(localStorage.getItem('trainingRecords') || '[]');
+            const stored = JSON.parse(localStorage.getItem('trainingRecords') || '[]');
+            const deduped = deduplicateTrainingRecords(stored);
+            allRecords = deduped;
+            if (deduped.length !== stored.length) {
+                saveRecords();
+            }
         }
 
         function saveRecords() {
@@ -1555,11 +1657,9 @@
             
             let category = document.getElementById('seminarCategory').value;
             if (category === '__new__') {
-                category = document.getElementById('seminarCategoryNew').value.trim();
-                if (!category) {
-                    alert('Please enter a new category name');
-                    return;
-                }
+                alert('Please enter the new category name and click Add Category');
+                showNewCategoryPanel();
+                return;
             }
             
             if (!category) {
@@ -1587,10 +1687,72 @@
             setTimeout(() => successDiv.classList.remove('show'), 3000);
 
             document.getElementById('addSeminarForm').reset();
-            document.getElementById('seminarCategoryNew').style.display = 'none';
+            hideNewCategoryPanel();
             clearImagePicker('seminar');
             populateCategoryDropdown();
             updateDashboard();
+        }
+
+        function showNewCategoryPanel() {
+            document.getElementById('newCategoryPanel').classList.add('show');
+            document.getElementById('seminarCategoryNew').focus();
+        }
+
+        function hideNewCategoryPanel() {
+            document.getElementById('newCategoryPanel').classList.remove('show');
+            document.getElementById('seminarCategoryNew').value = '';
+        }
+
+        function confirmNewCategory() {
+            const input = document.getElementById('seminarCategoryNew');
+            const name = input.value.trim();
+            if (!name) {
+                alert('Please enter a category name');
+                input.focus();
+                return;
+            }
+
+            const select = document.getElementById('seminarCategory');
+            const existing = [...select.options].find(option => option.value === name);
+            if (existing) {
+                select.value = name;
+            } else {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                const addNewOption = select.querySelector('option[value="__new__"]');
+                select.insertBefore(option, addNewOption);
+                select.value = name;
+            }
+
+            hideNewCategoryPanel();
+        }
+
+        function bindCategoryDropdownEvents() {
+            const select = document.getElementById('seminarCategory');
+            const newCategoryInput = document.getElementById('seminarCategoryNew');
+            if (!select || select.dataset.bound === 'true') {
+                return;
+            }
+
+            select.dataset.bound = 'true';
+            select.addEventListener('change', function() {
+                if (this.value === '__new__') {
+                    showNewCategoryPanel();
+                } else {
+                    hideNewCategoryPanel();
+                }
+            });
+
+            if (newCategoryInput && !newCategoryInput.dataset.bound) {
+                newCategoryInput.dataset.bound = 'true';
+                newCategoryInput.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        confirmNewCategory();
+                    }
+                });
+            }
         }
 
         function handleAddCertificate(event) {
@@ -1642,29 +1804,25 @@
         function populateCategoryDropdown() {
             const categories = [...new Set(allRecords.map(r => r.category))].sort();
             const select = document.getElementById('seminarCategory');
-            
-            // Keep the first two options
-            const existingOptions = select.innerHTML;
-            select.innerHTML = existingOptions;
-            
-            // Add existing categories
+            const currentValue = select.value;
+
+            select.innerHTML = `
+                <option value="">-- Select Category --</option>
+                <option value="__new__">+ Add New Category</option>
+            `;
+
             categories.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category;
                 option.textContent = category;
                 select.appendChild(option);
             });
-            
-            // Add event listener for new category
-            select.addEventListener('change', function() {
-                const newCategoryInput = document.getElementById('seminarCategoryNew');
-                if (this.value === '__new__') {
-                    newCategoryInput.style.display = 'block';
-                    newCategoryInput.focus();
-                } else {
-                    newCategoryInput.style.display = 'none';
-                }
-            });
+
+            if (currentValue && currentValue !== '__new__') {
+                select.value = currentValue;
+            }
+
+            bindCategoryDropdownEvents();
         }
 
         function populateEditCategoryDropdown() {
@@ -1879,7 +2037,7 @@
 
         function resetSeminarForm() {
             document.getElementById('addSeminarForm').reset();
-            document.getElementById('seminarCategoryNew').style.display = 'none';
+            hideNewCategoryPanel();
             clearImagePicker('seminar');
         }
 
