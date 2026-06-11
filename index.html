@@ -56,8 +56,9 @@
 
         .control-panel {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: minmax(320px, 2fr) minmax(220px, 1fr) minmax(180px, 0.9fr) auto;
             gap: 16px;
+            align-items: end;
             background: rgba(255, 255, 255, 0.92);
             border: 1px solid rgba(15, 23, 42, 0.08);
             border-radius: 24px;
@@ -101,6 +102,8 @@
             display: flex;
             gap: 12px;
             justify-content: flex-end;
+            align-items: flex-end;
+            width: 44px;
         }
 
         .btn {
@@ -121,6 +124,42 @@
             background: linear-gradient(135deg, var(--indigo), var(--blue));
             color: white;
             box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18);
+        }
+
+        .admin-login-link {
+            display: inline-grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--indigo), var(--blue));
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 12px 26px rgba(37, 99, 235, 0.18);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .admin-login-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
+        }
+
+        .admin-login-link svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2.4;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
         .btn-secondary {
@@ -590,6 +629,14 @@
         }
 
         @media (max-width: 1100px) {
+            .control-panel {
+                grid-template-columns: minmax(260px, 1.5fr) minmax(180px, 1fr) auto;
+            }
+
+            .control-group:first-child {
+                grid-column: 1 / -1;
+            }
+
             .hero-inner {
                 grid-template-columns: 1fr;
                 text-align: center;
@@ -622,7 +669,8 @@
             }
 
             .button-group {
-                justify-content: stretch;
+                justify-content: flex-end;
+                width: 100%;
             }
 
             .dashboard-grid,
@@ -679,6 +727,16 @@
                         <option value="Certificate">Certificates</option>
                     </select>
                 </div>
+                <div class="button-group">
+                    <a class="admin-login-link" href="admin.html" title="Admin login" aria-label="Admin login">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <path d="M10 17l5-5-5-5"></path>
+                            <path d="M15 12H3"></path>
+                        </svg>
+                        <span class="sr-only">Admin login</span>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -715,7 +773,72 @@
     <div class="watermark"><span>TRAINING PORTFOLIO</span></div>
 
     <script>
-        const trainingData = [
+        // Try to load data from localStorage (managed by admin panel), otherwise use default data
+        let trainingData = [];
+        
+        function loadTrainingData() {
+            const storedData = localStorage.getItem('trainingRecords');
+            const defaultData = getDefaultTrainingData().map(normalizeTrainingRecord);
+
+            if (storedData) {
+                let savedData = [];
+                try {
+                    savedData = JSON.parse(storedData).map(normalizeTrainingRecord);
+                } catch (error) {
+                    savedData = defaultData;
+                }
+
+                trainingData = mergeTrainingRecords(defaultData, savedData);
+            } else {
+                trainingData = defaultData;
+            }
+
+            localStorage.setItem('trainingRecords', JSON.stringify(trainingData));
+        }
+
+        function normalizeTrainingRecord(item) {
+            return {
+                ...item,
+                id: item.id || generateStableId(item),
+                type: item.type || 'Seminar',
+                duration: item.duration || '1 Day',
+                certificateNo: item.certificateNo || '',
+                images: Array.isArray(item.images) ? item.images : []
+            };
+        }
+
+        function generateStableId(item) {
+            return [item.title, item.provider, item.date]
+                .join('|')
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-|-$/g, '');
+        }
+
+        function getRecordKey(item) {
+            return [item.title, item.provider, item.date].join('|').toLowerCase();
+        }
+
+        function mergeTrainingRecords(defaultRecords, savedRecords) {
+            const savedByKey = new Map(savedRecords.map(record => [getRecordKey(record), record]));
+            const defaultKeys = new Set(defaultRecords.map(getRecordKey));
+            const merged = defaultRecords.map(defaultRecord => {
+                const key = getRecordKey(defaultRecord);
+                return savedByKey.get(key) || defaultRecord;
+            });
+
+            savedRecords.forEach(record => {
+                const key = getRecordKey(record);
+                if (!defaultKeys.has(key)) {
+                    merged.push(record);
+                }
+            });
+
+            return merged;
+        }
+
+        function getDefaultTrainingData() {
+            return [
             {
                 title: "AI & Digital Transformation in Aviation",
                 category: "AI and Digital Transformation in Aviation Industry",
@@ -1042,6 +1165,19 @@
                 ]
             },
             {
+                title: "The Airport Ecosystem: Enhancing Passenger Facilitation & Experience",
+                category: "Aviation Management",
+                provider: "Aviation Society (AUSOM), H-11, South Campus",
+                date: "2026-05-14",
+                duration: "1 Day",
+                description: "On 14th May, 2026, the Aviation Society (AUSOM) hosted a seminar on The Airport Ecosystem: Enhancing Passenger Facilitation & Experience at H-11, South Campus. Delivered an engaging talk on airport ecosystem and evolution of aviation, sharing valuable industry insights with the students. The seminar was attended by 110 BSAvM students in the auditorium.",
+                images: [
+                    "air1.jpg",
+                    "air2.jpg",
+                    "air3.jpg"
+                ]
+            },
+            {
                 title: "FRMUN Chief Guest Address",
                 category: "Aviation Management",
                 provider: "PAF Fazaia College Risalpur",
@@ -1249,6 +1385,7 @@
                 ]
             }
         ];
+        }
 
         const searchInput = document.getElementById('searchInput');
         const categoryFilter = document.getElementById('categoryFilter');
@@ -1259,6 +1396,8 @@
         let filteredData = [...trainingData];
 
         function init() {
+            loadTrainingData();
+            filteredData = [...trainingData];
             trainingData.forEach(item => { if (!item.type) item.type = 'Seminar'; });
             populateCategoryOptions();
             filterAndRender();
