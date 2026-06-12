@@ -97,19 +97,21 @@ function serveStatic(req, res, url) {
   });
 }
 
-function createServer() {
-  return http.createServer(async (req, res) => {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    try {
-      if (url.pathname.startsWith('/api/')) {
-        await handleApi(req, res, url);
-        return;
-      }
-      serveStatic(req, res, url);
-    } catch (error) {
-      sendError(res, error.status || 500, error.message || 'Server error', error.details);
+async function requestHandler(req, res) {
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  try {
+    if (url.pathname.startsWith('/api/')) {
+      await handleApi(req, res, url);
+      return;
     }
-  });
+    serveStatic(req, res, url);
+  } catch (error) {
+    sendError(res, error.status || 500, error.message || 'Server error', error.details);
+  }
+}
+
+function createServer() {
+  return http.createServer(requestHandler);
 }
 
 if (require.main === module) {
@@ -118,7 +120,6 @@ if (require.main === module) {
   });
 }
 
-module.exports = {
-  createServer,
-  ...require('./lib/portfolio-api')
-};
+module.exports = requestHandler;
+module.exports.createServer = createServer;
+Object.assign(module.exports, require('./lib/portfolio-api'));
