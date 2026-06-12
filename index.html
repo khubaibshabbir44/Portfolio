@@ -1068,33 +1068,68 @@
 
     <script src="js/training-defaults.js"></script>
     <script>
-        // Try to load data from localStorage (managed by admin panel), otherwise use default data
+        // Load portfolio data from the server-backed Supabase store.
         let trainingData = [];
+        let trainingDataSignature = '';
         
-        function loadTrainingData() {
-            const storedData = localStorage.getItem('trainingRecords');
-            const deletedKeysJson = localStorage.getItem('deletedTrainingRecords');
-            const deletedKeys = new Set(
-                (JSON.parse(deletedKeysJson || '[]') || []).map(key => key.toLowerCase())
-            );
-            const defaultData = getDefaultTrainingData().map(normalizeTrainingRecord)
-                .filter(record => !deletedKeys.has(getRecordKey(record)));
+        async function loadTrainingData() {
+            try {
+                const response = await fetch('/api/training-records');
+                if (!response.ok) {
+                    throw new Error('Unable to load database records');
+                }
+                const data = await response.json();
+                trainingData = deduplicateTrainingRecords((data.records || []).map(normalizeTrainingRecord));
+            } catch (error) {
+                console.error(error);
+                trainingData = getDefaultTrainingData().map(normalizeTrainingRecord);
+            }
+        }
 
-            if (storedData) {
-                let savedData = [];
-                try {
-                    savedData = JSON.parse(storedData).map(normalizeTrainingRecord)
-                        .filter(record => !deletedKeys.has(getRecordKey(record)));
-                } catch (error) {
-                    savedData = defaultData;
+        function getTrainingDataSignature(records) {
+            return JSON.stringify(records.map(record => ({
+                id: record.id,
+                title: record.title,
+                category: record.category,
+                provider: record.provider,
+                date: record.date,
+                type: record.type,
+                description: record.description,
+                certificateNo: record.certificateNo,
+                images: record.images
+            })));
+        }
+
+        async function refreshTrainingData({ fallbackToDefaults = false } = {}) {
+            try {
+                const response = await fetch('/api/training-records', { cache: 'no-store' });
+                if (!response.ok) {
+                    throw new Error('Unable to load database records');
+                }
+                const data = await response.json();
+                const nextData = deduplicateTrainingRecords((data.records || []).map(normalizeTrainingRecord));
+                const nextSignature = getTrainingDataSignature(nextData);
+                if (nextSignature === trainingDataSignature) {
+                    return false;
                 }
 
-                trainingData = mergeTrainingRecords(defaultData, savedData);
-            } else {
-                trainingData = defaultData;
+                trainingData = nextData;
+                trainingDataSignature = nextSignature;
+                filteredData = [...trainingData];
+                populateCategoryOptions();
+                filterAndRender();
+                return true;
+            } catch (error) {
+                console.error(error);
+                if (fallbackToDefaults) {
+                    trainingData = getDefaultTrainingData().map(normalizeTrainingRecord);
+                    trainingDataSignature = getTrainingDataSignature(trainingData);
+                    filteredData = [...trainingData];
+                    populateCategoryOptions();
+                    filterAndRender();
+                }
+                return false;
             }
-
-            localStorage.setItem('trainingRecords', JSON.stringify(trainingData));
         }
 
         function normalizeTrainingRecord(item) {
@@ -1219,14 +1254,12 @@
 
         let filteredData = [...trainingData];
 
-        function init() {
-            loadTrainingData();
-            filteredData = [...trainingData];
+        async function init() {
+            await refreshTrainingData({ fallbackToDefaults: true });
             trainingData.forEach(item => { if (!item.type) item.type = 'Seminar'; });
-            populateCategoryOptions();
-            filterAndRender();
             attachEventListeners();
             setupShowMoreToggle();
+            setupLiveDataRefresh();
         }
 
         function attachEventListeners() {
@@ -1265,13 +1298,37 @@
         }
 
         function populateCategoryOptions() {
+            const currentValue = categoryFilter.value;
             const categories = [...new Set(trainingData.map(item => item.category))].sort();
+            categoryFilter.innerHTML = '<option value="">All Categories</option>';
             categories.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category;
                 option.textContent = category;
                 categoryFilter.appendChild(option);
             });
+            categoryFilter.value = categories.includes(currentValue) ? currentValue : '';
+        }
+
+        function setupLiveDataRefresh() {
+            setInterval(() => {
+                refreshTrainingData();
+            }, 3000);
+
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    refreshTrainingData();
+                }
+            });
+
+            if ('BroadcastChannel' in window) {
+                const channel = new BroadcastChannel('portfolio-records');
+                channel.addEventListener('message', (event) => {
+                    if (event.data && event.data.type === 'records-updated') {
+                        refreshTrainingData();
+                    }
+                });
+            }
         }
 
         function filterAndRender() {

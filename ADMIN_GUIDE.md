@@ -1,7 +1,7 @@
 # Admin Panel Guide
 
 ## Overview
-The Admin Panel allows you to manage seminars and certificates without a database. All changes are stored locally in your browser using **localStorage** and automatically sync with the main profile page.
+The Admin Panel allows you to manage seminars and certificates in Supabase and automatically sync them with the main profile page.
 
 ---
 
@@ -43,8 +43,7 @@ The Admin Panel allows you to manage seminars and certificates without a databas
 
 ### Login Credentials (Demo)
 ```
-Username: admin
-Password: admin123
+Admin credentials are stored in Supabase. The password is stored as a salted hash.
 ```
 
 1. Open `admin.html` in your browser
@@ -56,7 +55,7 @@ Password: admin123
 ## How It Works
 
 ### Data Storage
-- All data is stored in **localStorage** (browser's local storage)
+- Portfolio records are stored in Supabase.
 - Data persists across browser sessions
 - No server/database required
 
@@ -108,7 +107,7 @@ Password: admin123
 
 ⚠️ **Backup**
 - Consider exporting records periodically
-- localStorage is limited to ~5-10MB
+- Uploaded data size depends on the configured Supabase plan and storage approach.
 
 ✅ **Changes Reflect Automatically**
 - Admin Panel and Main Page share the same data source
@@ -121,14 +120,14 @@ Password: admin123
 ### Records Not Showing After Adding
 - Refresh `index.html`
 - Check that you're in the same browser
-- Open browser DevTools (F12) → Application → localStorage to verify
+- Check the Supabase `training_records` table to verify saved records.
 
 ### Lost Data
 - Check if browser data/cache was cleared
 - Use Demo Credentials again to reload default data
 
 ### Can't Login
-- Use: **Username: admin** | **Password: admin123**
+- Use the admin credentials configured in Supabase.
 - Check for typos
 - Try different browser if issues persist
 

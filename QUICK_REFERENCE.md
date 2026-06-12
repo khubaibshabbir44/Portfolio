@@ -2,8 +2,8 @@
 
 ## 🔐 Login
 - **URL:** `admin.html`
-- **Username:** `admin`
-- **Password:** `admin123`
+- **Username:** Stored in Supabase
+- **Password:** Stored as a salted hash in Supabase
 
 ---
 
@@ -78,19 +78,19 @@ Images: nust1.jpg, nust2.jpg, nust3.jpg
 ## 💾 Data Management
 
 **Where is data stored?**
-- Browser's localStorage
+- Supabase database
 - Same location as cookies
 
 **How to backup?**
 1. Open Browser DevTools (F12)
-2. Go to Application > localStorage
+2. Check the Supabase `training_records` table
 3. Find key: `trainingRecords`
 4. Copy the JSON data
 5. Save to a file
 
 **How to restore?**
 1. Open DevTools
-2. Go to Application > localStorage  
+2. Check the Supabase `training_records` table
 3. Find key: `trainingRecords`
 4. Paste backup data
 5. Refresh page
@@ -105,7 +105,7 @@ Images: nust1.jpg, nust2.jpg, nust3.jpg
 
 ## 🔄 Sync with Main Page
 1. Make changes in admin panel
-2. Changes auto-save to localStorage
+2. Changes save to Supabase
 3. **Refresh** `index.html` to see updates
 4. No action needed!
 
@@ -124,15 +124,15 @@ Images: nust1.jpg, nust2.jpg, nust3.jpg
 **Can't login?**
 - Check caps lock
 - Username: `admin` (lowercase)
-- Password: `admin123`
+- Password: configured in Supabase as a salted hash
 
 **Changes not showing?**
 - Refresh the page
-- Check browser localStorage in DevTools
+- Check Supabase table data and server logs
 - Try different browser
 
 **Records disappeared?**
-- Check DevTools → Application → localStorage
+- Check the Supabase `training_records` table
 - Look for `trainingRecords` key
 - May need to restore from backup
 
@@ -176,7 +176,7 @@ Images: nust1.jpg, nust2.jpg, nust3.jpg
    - Highlight learning outcomes
 
 4. **Backups**
-   - Export localStorage weekly
+   - Export Supabase data regularly
    - Save to multiple locations
    - Keep version history
 
@@ -184,11 +184,9 @@ Images: nust1.jpg, nust2.jpg, nust3.jpg
 
 ## 🎨 Customization
 To change login credentials:
-1. Open `admin.html`
-2. Find: `const ADMIN_USERNAME = 'admin'`
-3. Change to: `const ADMIN_USERNAME = 'newusername'`
-4. Find: `const ADMIN_PASSWORD = 'admin123'`
-5. Change to: `const ADMIN_PASSWORD = 'newpassword'`
+1. Open Supabase SQL Editor.
+2. Update the `admin_users` row with a new salt and password hash.
+3. Keep the plain password out of project files.
 6. Save file
 
 ---

@@ -12,8 +12,8 @@
 
 | Field | Value |
 |-------|-------|
-| **Username** | syedaftabgillani |
-| **Password** | apm12345 |
+| **Username** | Stored in Supabase `admin_users` |
+| **Password** | Stored as salted hash in Supabase |
 
 ---
 
@@ -68,8 +68,7 @@
 
 1. Open `admin.html` in your browser
 2. Enter credentials:
-   - **Username:** syedaftabgillani
-   - **Password:** apm12345
+   - Use the admin username and password configured in Supabase.
 3. You'll see the admin profile with picture and name
 4. Access dashboard, add seminars, manage records
 
@@ -125,8 +124,8 @@ Profile/
 
 | Aspect | Before | After |
 |--------|--------|-------|
-| **Username** | admin | syedaftabgillani |
-| **Password** | admin123 | apm12345 |
+| **Username** | admin | Supabase `admin_users` |
+| **Password** | Demo password | Salted hash in Supabase |
 | **Admin Display** | None | Name, Title, Picture |
 | **Duration Field** | Included | Removed |
 | **Certificate # Field** | Included | Removed |
@@ -143,7 +142,7 @@ Profile/
 
 ## Testing Checklist
 
-- [ ] Login with syedaftabgillani / apm12345
+- [ ] Login with the Supabase admin credentials
 - [ ] Verify profile picture displays
 - [ ] Verify admin name in header
 - [ ] Add seminar with category dropdown

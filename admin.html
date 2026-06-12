@@ -64,6 +64,22 @@
                 url('plane.jpg') center / cover no-repeat;
         }
 
+        .auth-loading {
+            position: fixed;
+            inset: 0;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.6)),
+                url('plane.jpg') center / cover no-repeat;
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
         .login-overlay {
             position: absolute;
             inset: 0;
@@ -1132,8 +1148,9 @@
     </style>
 </head>
 <body>
-    
-<div class="login-container" id="loginContainer">
+
+<div class="auth-loading" id="authLoading">Loading admin...</div>
+<div class="login-container" id="loginContainer" style="display: none;">
     <div class="login-overlay"></div>
 
     <div class="airport-login-card">
@@ -1478,15 +1495,57 @@
     </div>
 
     <script>
-        // Admin credentials
-        const ADMIN_USERNAME = 'syedaftabgillani';
-        const ADMIN_PASSWORD = 'apm12345';
         const ADMIN_NAME = 'Syed Aftab Gillani';
         const ADMIN_TITLE = 'Chief Operating Officer, Islamabad International Airport';
 
         let currentEditingId = null;
         let allRecords = [];
         let deletedRecordKeys = [];
+
+        async function apiRequest(path, options = {}) {
+            const response = await fetch(path, {
+                ...options,
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(options.headers || {})
+                }
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                throw new Error(data.error || 'Request failed');
+            }
+            return data;
+        }
+
+        function showAdminError(message) {
+            const errorDiv = document.getElementById('loginError');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+        }
+
+        function showLoginScreen() {
+            document.getElementById('authLoading').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        function showAdminPanel() {
+            document.getElementById('authLoading').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+        }
+
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function notifyPortfolioRecordsChanged() {
+            if ('BroadcastChannel' in window) {
+                const channel = new BroadcastChannel('portfolio-records');
+                channel.postMessage({ type: 'records-updated', at: Date.now() });
+                channel.close();
+            }
+        }
 
         const imagePickerConfig = {
             seminar: { fileInputId: 'seminarImageFiles', pathInputId: 'seminarImagePath', textareaId: 'seminarImages', previewId: 'seminarImagePreview', items: [] },
@@ -1497,9 +1556,9 @@
 
         // The main profile page owns the full default data set. Do not seed a
         // partial admin-only list here, because that can hide most seminars.
-        function initializeData() {
+        async function initializeData() {
             loadDeletedKeys();
-            loadRecords();
+            await loadRecords();
             populateCategoryDropdown();
             setupImagePickers();
             bindCategoryDropdownEvents();
@@ -1616,34 +1675,34 @@
             return '_' + Math.random().toString(36).substr(2, 9);
         }
 
-        function handleLogin(event) {
+        async function handleLogin(event) {
             event.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('loginError');
 
-            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-                localStorage.setItem('adminLoggedIn', 'true');
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                initializeData();
-                updateDashboard();
-                loadRecords();
-            } else {
-                errorDiv.textContent = 'Invalid username or password';
-                errorDiv.classList.add('show');
+            try {
+                await apiRequest('/api/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ username, password })
+                });
+                showAdminPanel();
+                errorDiv.classList.remove('show');
+                await initializeData();
+                await updateDashboard();
+            } catch (error) {
+                showAdminError(error.message || 'Invalid username or password');
             }
         }
 
-        function handleLogout() {
-            localStorage.removeItem('adminLoggedIn');
-            document.getElementById('loginContainer').style.display = 'flex';
-            document.getElementById('adminPanel').style.display = 'none';
+        async function handleLogout() {
+            await apiRequest('/api/auth/logout', { method: 'POST' }).catch(() => {});
+            showLoginScreen();
             document.getElementById('loginForm').reset();
             document.getElementById('loginError').classList.remove('show');
         }
 
-        function switchTab(tabName) {
+        async function switchTab(tabName) {
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
@@ -1657,15 +1716,15 @@
             event.target.classList.add('active');
 
             if (tabName === 'manage') {
-                loadAllRecords();
+                await loadAllRecords();
             } else if (tabName === 'manage-certificates') {
-                loadCertificateRecords();
+                await loadCertificateRecords();
             } else if (tabName === 'add-certificate') {
                 populateCertCategoryDropdown();
             } else if (tabName === 'add-seminar') {
                 populateCategoryDropdown();
             } else if (tabName === 'dashboard') {
-                updateDashboard();
+                await updateDashboard();
             }
         }
 
@@ -1724,18 +1783,11 @@
         }
 
         function loadDeletedKeys() {
-            try {
-                deletedRecordKeys = JSON.parse(localStorage.getItem('deletedTrainingRecords') || '[]');
-                if (!Array.isArray(deletedRecordKeys)) {
-                    deletedRecordKeys = [];
-                }
-            } catch (error) {
-                deletedRecordKeys = [];
-            }
+            deletedRecordKeys = [];
         }
 
         function saveDeletedKeys() {
-            localStorage.setItem('deletedTrainingRecords', JSON.stringify(deletedRecordKeys));
+            deletedRecordKeys = [];
         }
 
         function removeDeletedRecordKey(recordKey) {
@@ -1743,21 +1795,30 @@
             saveDeletedKeys();
         }
 
-        function loadRecords() {
-            const stored = JSON.parse(localStorage.getItem('trainingRecords') || '[]');
-            const deduped = deduplicateTrainingRecords(stored)
+        async function loadRecords() {
+            const { records } = await apiRequest('/api/training-records');
+            const deduped = deduplicateTrainingRecords(records || [])
                 .filter(record => !deletedRecordKeys.includes(getRecordKey(record)));
             allRecords = deduped;
-            if (deduped.length !== stored.length) {
-                saveRecords();
-            }
         }
 
-        function saveRecords() {
-            localStorage.setItem('trainingRecords', JSON.stringify(allRecords));
+        async function saveRecords() {
+            await Promise.all(allRecords.map(record => apiRequest('/api/training-records', {
+                method: 'POST',
+                body: JSON.stringify({ record })
+            })));
+            notifyPortfolioRecordsChanged();
         }
 
-        function handleAddSeminar(event) {
+        async function saveRecord(record) {
+            await apiRequest('/api/training-records', {
+                method: 'POST',
+                body: JSON.stringify({ record })
+            });
+            notifyPortfolioRecordsChanged();
+        }
+
+        async function handleAddSeminar(event) {
             event.preventDefault();
             const successDiv = document.getElementById('seminarSuccess');
             
@@ -1788,7 +1849,7 @@
 
             removeDeletedRecordKey(getRecordKey(newRecord));
             allRecords.push(newRecord);
-            saveRecords();
+            await saveRecord(newRecord);
 
             successDiv.classList.add('show');
             setTimeout(() => successDiv.classList.remove('show'), 3000);
@@ -1797,10 +1858,10 @@
             hideNewCategoryPanel();
             clearImagePicker('seminar');
             populateCategoryDropdown();
-            updateDashboard();
+            await updateDashboard({ reload: false });
         }
 
-        function handleAddAchievement(event) {
+        async function handleAddAchievement(event) {
             event.preventDefault();
             const successDiv = document.getElementById('achievementSuccess');
             
@@ -1831,7 +1892,7 @@
 
             removeDeletedRecordKey(getRecordKey(newRecord));
             allRecords.push(newRecord);
-            saveRecords();
+            await saveRecord(newRecord);
 
             successDiv.classList.add('show');
             setTimeout(() => successDiv.classList.remove('show'), 3000);
@@ -1840,7 +1901,7 @@
             hideNewAchievementCategoryPanel();
             clearImagePicker('achievement');
             populateCategoryDropdown();
-            updateDashboard();
+            await updateDashboard({ reload: false });
         }
 
         function showNewCategoryPanel() {
@@ -1967,7 +2028,7 @@
             }
         }
 
-        function handleAddCertificate(event) {
+        async function handleAddCertificate(event) {
             event.preventDefault();
             const successDiv = document.getElementById('certSuccess');
 
@@ -1986,14 +2047,14 @@
 
             removeDeletedRecordKey(getRecordKey(newRecord));
             allRecords.push(newRecord);
-            saveRecords();
+            await saveRecord(newRecord);
 
             successDiv.classList.add('show');
             setTimeout(() => successDiv.classList.remove('show'), 3000);
             document.getElementById('addCertForm').reset();
             clearImagePicker('certificate');
             populateCertCategoryDropdown();
-            updateDashboard();
+            await updateDashboard({ reload: false });
         }
 
         function populateCertCategoryDropdown() {
@@ -2073,8 +2134,10 @@
             });
         }
 
-        function updateDashboard() {
-            loadRecords();
+        async function updateDashboard({ reload = true } = {}) {
+            if (reload) {
+                await loadRecords();
+            }
             const seminars = allRecords.filter(r => r.type !== 'Certificate');
             const profileCertificates = allRecords.filter(r => r.type === 'Certificate');
             const categories = new Set(allRecords.map(r => r.category)).size;
@@ -2192,8 +2255,10 @@
                 .replace(/'/g, '&#39;');
         }
 
-        function loadAllRecords() {
-            loadRecords();
+        async function loadAllRecords({ reload = true } = {}) {
+            if (reload) {
+                await loadRecords();
+            }
             const container = document.getElementById('allRecordsContainer');
 
             if (allRecords.length === 0) {
@@ -2216,8 +2281,10 @@
             `).join('');
         }
 
-        function loadCertificateRecords() {
-            loadRecords();
+        async function loadCertificateRecords({ reload = true } = {}) {
+            if (reload) {
+                await loadRecords();
+            }
             const container = document.getElementById('certificateRecordsContainer');
             const certificates = allRecords.filter(record => record.type === 'Certificate');
 
@@ -2264,7 +2331,7 @@
             currentEditingId = null;
         }
 
-        function handleEditSubmit(event) {
+        async function handleEditSubmit(event) {
             event.preventDefault();
 
             const record = allRecords.find(r => r.id === currentEditingId);
@@ -2278,30 +2345,28 @@
                 record.images = getImagePickerValues('edit');
                 removeDeletedRecordKey(getRecordKey(record));
 
-                saveRecords();
+                await saveRecord(record);
                 clearImagePicker('edit');
                 closeEditModal();
-                loadAllRecords();
-                updateDashboard();
+                await loadAllRecords({ reload: false });
+                await updateDashboard({ reload: false });
                 populateCategoryDropdown();
                 populateCertCategoryDropdown();
             }
         }
 
-        function deleteRecord(recordId) {
+        async function deleteRecord(recordId) {
             if (confirm('Are you sure you want to delete this record?')) {
                 const record = allRecords.find(r => r.id === recordId);
                 if (record) {
-                    const key = getRecordKey(record);
-                    if (!deletedRecordKeys.includes(key)) {
-                        deletedRecordKeys.push(key);
-                        saveDeletedKeys();
-                    }
+                    await apiRequest(`/api/training-records/${encodeURIComponent(record.id)}`, {
+                        method: 'DELETE'
+                    });
                 }
                 allRecords = allRecords.filter(r => r.id !== recordId);
-                saveRecords();
-                loadAllRecords();
-                updateDashboard();
+                notifyPortfolioRecordsChanged();
+                await loadAllRecords({ reload: false });
+                await updateDashboard({ reload: false });
             }
         }
 
@@ -2334,13 +2399,18 @@
         }
 
         // Check if admin is logged in on page load
-        window.addEventListener('load', () => {
+        window.addEventListener('load', async () => {
             setupImagePickers();
-            if (localStorage.getItem('adminLoggedIn') === 'true') {
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                initializeData();
-                updateDashboard();
+            const [session] = await Promise.all([
+                apiRequest('/api/auth/session').catch(() => ({ authenticated: false })),
+                wait(450)
+            ]);
+            if (session.authenticated) {
+                showAdminPanel();
+                await initializeData();
+                await updateDashboard();
+            } else {
+                showLoginScreen();
             }
         });
 

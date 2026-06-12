@@ -9,10 +9,10 @@ A fully functional admin page with:
 - **Add Seminar** form to create new training entries
 - **Add Certificate** form to add certificates to existing seminars
 - **Manage All** tab to view, edit, and delete records
-- **localStorage Integration** (no database needed)
+- **Supabase Integration** for persistent database storage
 
 ### 2. **Updated Main Page (`index.html`)**
-- Now loads data from localStorage first
+- Now loads data from Supabase first
 - Falls back to default data if nothing is stored
 - Added "Admin Panel" button in controls section
 - Changes in admin panel automatically reflect on main page
@@ -34,8 +34,8 @@ Complete documentation with:
 - Or click "Admin Panel" button on `index.html`
 
 ### Step 2: Login
-- **Username:** `admin`
-- **Password:** `admin123`
+- **Username:** Stored in Supabase
+- **Password:** Stored as a salted hash in Supabase
 
 ### Step 3: Manage Content
 1. **Dashboard** - View statistics
@@ -44,7 +44,7 @@ Complete documentation with:
 4. **Manage All** - Edit or delete records
 
 ### Step 4: See Changes
-- All changes are stored in browser's localStorage
+- All changes are stored in Supabase.
 - Refresh `index.html` to see updates
 - Changes persist across browser sessions
 
@@ -52,7 +52,7 @@ Complete documentation with:
 
 ## Key Features
 
-✅ **No Database Required** - Uses browser localStorage  
+✅ **Database Storage** - Uses Supabase  
 ✅ **Real-time Sync** - Changes appear on main page  
 ✅ **Full CRUD** - Create, Read, Update, Delete operations  
 ✅ **User Login** - Demo credentials included  
@@ -67,7 +67,7 @@ Complete documentation with:
 
 ```
 Profile/
-├── index.html          (Updated - now uses localStorage)
+├── index.html          (Updated - now uses Supabase)
 ├── admin.html          (NEW - Admin panel)
 ├── ADMIN_GUIDE.md      (NEW - Documentation)
 ├── Profile.jpg         (existing)
@@ -80,7 +80,7 @@ Profile/
 
 ### Adding a Seminar:
 1. Go to `admin.html`
-2. Login (admin/admin123)
+2. Login with the Supabase admin credentials
 3. Click "Add Seminar"
 4. Fill in the form
 5. Click "Add Seminar"
@@ -112,7 +112,7 @@ Profile/
 ## Demo Features Working
 
 1. **Login Form** ✓
-   - Demo credentials: admin/admin123
+   - Admin credentials are verified through Supabase.
    - Session management with logout
 
 2. **Dashboard** ✓
@@ -125,7 +125,7 @@ Profile/
    - Confirmation dialogs
 
 4. **Data Persistence** ✓
-   - localStorage integration
+   - Supabase integration
    - Auto-sync with main page
    - Data survives page refresh
 

@@ -9,8 +9,7 @@ Your admin panel has been completely redesigned and updated with Syed Aftab Gill
 ## 🔐 New Login Credentials
 
 ```
-Username: syedaftabgillani
-Password: apm12345
+Username and password are stored in Supabase. The password is stored as a salted hash.
 ```
 
 ---
@@ -127,8 +126,8 @@ Password: apm12345
 
 ### Step 1: Login
 1. Open `admin.html`
-2. Enter username: `syedaftabgillani`
-3. Enter password: `apm12345`
+2. Enter the admin username configured in Supabase
+3. Enter the matching admin password
 4. You'll see admin profile with picture
 
 ### Step 2: Navigate
@@ -179,7 +178,7 @@ Password: apm12345
 
 ## 💾 Data Storage
 
-**Where:** Browser's localStorage  
+**Where:** Supabase database  
 **Key:** `trainingRecords`  
 **Persistence:** Survives page refresh and browser restart  
 **Sync:** Changes auto-sync to index.html
@@ -230,8 +229,7 @@ Works perfectly on:
 
 ### Credentials (Browser-based)
 ```javascript
-ADMIN_USERNAME = 'syedaftabgillani'
-ADMIN_PASSWORD = 'apm12345'
+Admin login is verified by the Supabase `verify_admin_login` function.
 ADMIN_NAME = 'Syed Aftab Gillani'
 ```
 
@@ -264,7 +262,7 @@ ADMIN_NAME = 'Syed Aftab Gillani'
 ## ✅ Quick Checklist
 
 - [ ] Open admin.html
-- [ ] Login with syedaftabgillani / apm12345
+- [ ] Login with the Supabase admin credentials
 - [ ] See profile picture and admin name
 - [ ] Check Dashboard tab
 - [ ] Try Add Seminar with category dropdown
@@ -281,7 +279,7 @@ ADMIN_NAME = 'Syed Aftab Gillani'
 Your admin portal is ready to manage seminars and certificates with:
 - ✨ Beautiful professional design
 - 👤 Admin profile display
-- 🔐 Secure login (syedaftabgillani / apm12345)
+- 🔐 Secure login verified through Supabase
 - 📋 Simplified forms
 - 🏷️ Smart category management
 - 💾 Data persistence
