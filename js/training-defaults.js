@@ -559,15 +559,17 @@ function getDefaultTrainingData() {
                 type: "Certificate"
             },
             {
-                title: "ECO Friendly Policies and Initiatives",
+                title: "Eco-Friendly Initiatives in the Aviation Industry",
                 category: "Sustainability",
-                provider: "Institute of Earth and Environmental Sciences, Punjab University Lahore",
+                provider: "Institute of Environmental Engineering and Research, UET Lahore",
                 date: "2019-04-13",
                 duration: "1 Day",
-                description: "Certificate for discussion on eco friendly policies and initiatives of the Aviation Industry.",
+                description: "Held discussion with Environmental Engineering students at Institute of Environmental Engineering and Research, University of Engineering and Technology Lahore on ECO friendly initiatives by Aviation Industry.",
                 certificateNo: "2019-04-13",
                 images: [
-                    "2019-04-13 ECO FRIENDLY POLICIES AND INIATIV.jpg"
+                    "UETeco1.jpg",
+                    "UETeco2.jpg",
+                    "2019-04-13.jpg"
                 ],
                 type: "Certificate"
             },
@@ -738,6 +740,31 @@ function getDefaultTrainingData() {
                     "stud1.jpg",
                     "stud2.jpg",
                     "stud3.jpg"
+                ]
+            },
+            {
+                title: "Air Cargo Operations & Supply Chain Management (LUMS SDSB)",
+                category: "Aviation Management",
+                provider: "Suleman Dawood School of Business, LUMS",
+                date: "2022-04-01",
+                duration: "1 Day",
+                description: "Held an interactive session with the MBA 2023 class of LUMS Suleman Dawood School of Business on Air Cargo Operations and Supply Chain management: Impacts of COVID-19 and the Russia-Ukraine war.",
+                images: [
+                    "lumsblue1.png",
+                    "lumsblue1.jpg",
+                    "lumsblue2.jpg"
+                ]
+            },
+            {
+                title: "Flight Safety Officers Briefing (CASM, PAF Base Nur Khan)",
+                category: "Flight Safety",
+                provider: "CASM, PAF Base Nur Khan",
+                date: "2024-05-01",
+                duration: "1 Day",
+                description: "Briefing given to course participants of the Flight Safety Officers course at CASM, PAF Base Nur Khan about Airport operations and Safety Management System.",
+                images: [
+                    "brief1.png",
+                    "brief2.png"
                 ]
             }
         ];
