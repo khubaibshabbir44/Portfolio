@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syed Aftab Gillani</title>
+    <title>Syed Aftab Gilani</title>
     <style>
         :root {
             --bg: #f8fafc;
@@ -11,7 +11,7 @@
             --surface-soft: #f1f5f9;
             --text: #0f172a;
             --text-muted: #64748b;
-            --border: rgba(15, 23, 42, 0.08);
+            --border: rgba(255, 255, 255, 0.08);
             --blue: #2563eb;
             --indigo: #1e40af;
             --teal: #0f766e;
@@ -941,7 +941,7 @@
                     <label for="typeFilter">Type filter</label>
                     <select id="typeFilter">
                         <option value="">All Types</option>
-                        <option value="Seminar">Seminars</option>
+                        <option value="Seminar">Lectures</option>
                         <option value="Certificate">Certificates</option>
                     </select>
                 </div>
@@ -965,7 +965,7 @@
                 </div>
                 <div class="hero-copy">
                     
-                    <h1>Syed Aftab Gillani</h1>
+                    <h1>Syed Aftab Gilani</h1>
                     <p class="title">Chief Operating Officer, Islamabad International Airport</p>
                     <div class="profile-summary">
                         <p class="lead">MBA in Operations Management from LUMS, M.Sc. in Physics from GC University Lahore, Basic Air Traffic Control Course ,Aviation Policy, and Public Policy from renowned institutions in Singapore and South Korea.</p>
@@ -1052,7 +1052,7 @@
         <section class="timeline-section">
 
             <div class="section-header">
-                <h2>Executive Seminars Timeline</h2>
+                <h2> Lectures Delivered</h2>
             </div>
             <div class="timeline-wrapper" id="recordsContainer"></div>
             <div class="no-results" id="noResultsMessage" style="display:none;">
@@ -1061,7 +1061,7 @@
             </div>
         </section>
 
-        <div class="toolbar-footer">Syed Aftab Gillani</div>
+        <div class="toolbar-footer">Syed Aftab Gilani</div>
     </div>
 
     <div class="watermark"><span>TRAINING PORTFOLIO</span></div>
@@ -1073,12 +1073,18 @@
         
         function loadTrainingData() {
             const storedData = localStorage.getItem('trainingRecords');
-            const defaultData = getDefaultTrainingData().map(normalizeTrainingRecord);
+            const deletedKeysJson = localStorage.getItem('deletedTrainingRecords');
+            const deletedKeys = new Set(
+                (JSON.parse(deletedKeysJson || '[]') || []).map(key => key.toLowerCase())
+            );
+            const defaultData = getDefaultTrainingData().map(normalizeTrainingRecord)
+                .filter(record => !deletedKeys.has(getRecordKey(record)));
 
             if (storedData) {
                 let savedData = [];
                 try {
-                    savedData = JSON.parse(storedData).map(normalizeTrainingRecord);
+                    savedData = JSON.parse(storedData).map(normalizeTrainingRecord)
+                        .filter(record => !deletedKeys.has(getRecordKey(record)));
                 } catch (error) {
                     savedData = defaultData;
                 }
@@ -1098,7 +1104,11 @@
                 type: item.type || 'Seminar',
                 duration: item.duration || '1 Day',
                 certificateNo: item.certificateNo || '',
-                images: Array.isArray(item.images) ? item.images : []
+                images: Array.isArray(item.images)
+                    ? item.images
+                    : item.images
+                        ? [item.images]
+                        : []
             };
         }
 
@@ -1171,7 +1181,15 @@
             const merged = defaultRecords.map(defaultRecord => {
                 const exactKey = getRecordKey(defaultRecord);
                 if (savedByExactKey.has(exactKey)) {
-                    return savedByExactKey.get(exactKey);
+                    const savedRecord = savedByExactKey.get(exactKey);
+                    const mergedRecord = {
+                        ...defaultRecord,
+                        ...savedRecord,
+                        images: Array.isArray(savedRecord.images) && savedRecord.images.length
+                            ? savedRecord.images
+                            : defaultRecord.images || []
+                    };
+                    return mergedRecord;
                 }
 
                 const semanticMatch = savedRecords.find(record =>

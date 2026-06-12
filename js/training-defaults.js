@@ -32,7 +32,7 @@ function getDefaultTrainingData() {
                 title: "AI, Digital Disruption and STEM Opportunity for Women",
                 category: "AI and Digital Transformation in Aviation Industry",
                 provider: "Lahore College for Women University",
-                date: "2020",
+                date: "2020-02-11",
                 duration: "1 Day",
                 description: "For sustainable development, women and girls must be given equal opportunities in the fields of science, technology, engineering, mathematics. Held discussion with Computer Science students of Lahore College for Women University on Artificial Intelligence and Digital disruptions",
                 certificateNo: "LCWU-2025-001",
@@ -59,7 +59,7 @@ function getDefaultTrainingData() {
                 title: "Industrial Relations in Aviation",
                 category: "Aviation Management",
                 provider: "Information Technology University, Punjab",
-                date: "2020",
+                date: "2020-03-07",
                 duration: "1 Day",
                 description: "Always treat your employees exactly as you want them to treat your best customers  Stephen R. Covey. Discussed role of industrial relations in aviation Industry with students of school of business and management of Information Technology University,Punjab.",
                 images: [
@@ -72,7 +72,7 @@ function getDefaultTrainingData() {
                 title: "Digital Economy and Youth Innovation",
                 category: "AI and Digital Transformation in Aviation Industry",
                 provider: "Information Technology University, Punjab",
-                date: "2020",
+                date: "2020-02-12",
                 duration: "1 Day",
                 description: "Pakistani youth has a great potential of developing digital technologies. Digital economy is the future of Pakistan. Visited digital technology labs of Information Technology University Punjab (ITU) and saw innovative works of young students.",
                 images: [
@@ -85,7 +85,7 @@ function getDefaultTrainingData() {
                 title: "Climate Action and Aviation Sustainability",
                 category: "Sustainability",
                 provider: "UET Lahore",
-                date: "2019-05-15",
+                date: "2020-01-31",
                 duration: "1 Day",
                 description: "Bushfires in #Australia provide enough evidence of Global Climate crisis. It requires collective ClimateAction now. Held discussion with Environmental Engineering students of UET Lahore on eco-friendly policies and initiatives of the Aviation Industry.",
                 images: [
@@ -95,10 +95,24 @@ function getDefaultTrainingData() {
                 ]
             },
             {
+                title: "ECO Friendly Initiatives by Aviation Industry",
+                category: "Sustainability",
+                provider: "Institute of Environmental Engineering and Research, University of Engineering Technology Lahore",
+                date: "2019-04-13",
+                duration: "1 Day",
+                description: "Held discussion with Environmental Engineering students at Institute of Environmental Engineering and Research, University of Engineering Technology Lahore on ECO friendly initiatives by Aviation Industry.",
+                images: [
+                    "ueta1.jpg",
+                    "ueta2.jpg",
+                    "ueta3.jpg"
+                ],
+                type: "Seminar"
+            },
+            {
                 title: "Aviation Climate Resilience and Environmental Strategy",
                 category: "Sustainability",
                 provider: "Forman Christian College University",
-                date: "2020",
+                date: "2020-02-25",
                 description: "Climatechange is occurring at much higher rates than anticipated due to continuous rise in greenhouse gas(GHG) levels and its effects are evident worldwide.World must transform its energy,industry,transport,food and agriculture systems to cope with #Climatecrisis.Held discussion with #EnvironmentalSciences students of Forman Christian College University on Aviation Industry initiatives to deal with Environmental challenges.",
                 certificateNo: "FORMAN-2025-001",
                 images: [
@@ -112,7 +126,7 @@ function getDefaultTrainingData() {
                 title: "ICAO Policy Initiatives for Environmental Aviation",
                 category: "Aviation Law and Policy",
                 provider: "Shaikh Ahmad Hassan School of Law, LUMS",
-                date: "2019",
+                date: "2019-02-11",
                 duration: "1 Day",
                 description: "Held talk with Law students of Shaikh Ahmad Hassan School of Law LUMS on policy making and in particular ICAO policy initiatives & action plans to minimize effects of Global Civil Aviation on environment.",
                 images: [
@@ -125,7 +139,7 @@ function getDefaultTrainingData() {
                 title: "International Air Law for Civil Aviation",
                 category: "Aviation Law and Policy",
                 provider: "Law College, Punjab University Lahore",
-                date: "2020",
+                date: "2020-01-20",
                 description: "Safe,secure and sustainable aviation is possible only if system of rules governing international #civilaviation is implemented effectively. Held a talk on International Air Law with LLB and LLM students of #PunjabUniversity Law College,the oldest and finest seat of legal learning in the country.",
                 images: [
                     "law1.jpg",
@@ -149,7 +163,7 @@ function getDefaultTrainingData() {
                 title: "Digital Transformation at ITU Lahore",
                 category: "AI and Digital Transformation in Aviation Industry",
                 provider: "Information Technology University, Lahore",
-                date: "2020",
+                date: "2019-12-28",
                 duration: "1 Day",
                 description: "Innovative technologies will improve business processes and operations in aviation Industry. Held an interactive session with students of Information Technology University (ITU), Lahore about Digital Transformation.",
                 images: [
@@ -162,7 +176,7 @@ function getDefaultTrainingData() {
                 title: "Informal Economies and Aviation Industry Initiatives",
                 category: "Aviation Law and Policy",
                 provider: "Government College University Lahore",
-                date: "2020",
+                date: "2019-12-20",
                 duration: "1 Day",
                 description: "Held an interactive session with GC University Lahore, Economics Department students on informal and illegal economies, challenges and Aviation Industry initiatives.",
                 images: [
@@ -188,7 +202,7 @@ function getDefaultTrainingData() {
                 title: "Climate Emergency and Women in Aviation",
                 category: "Sustainability",
                 provider: "Lahore College for Women University",
-                date: "2020",
+                date: "2019-11-15",
                 duration: "1 Day",
                 description: "Educating a girl means educating a generation. Climate emergency and environmental crisis cannot be tackled without active participation of females, which constitute 50% of society. Discussed Aviation Industry's eco-friendly initiatives with environmental science students of Lahore College For Women University.",
                 images: [
@@ -201,7 +215,7 @@ function getDefaultTrainingData() {
                 title: "Women in Aviation Leadership and Gender Equality",
                 category: "Aviation Management",
                 provider: "ICAO Regional Women in Aviation Initiative",
-                date: "2019",
+                date: "2018-12-07",
                 duration: "1 Day",
                 description: "Women are underrepresented in the global aviation sector. Barely 5.18% of pilots are female worldwide. The ICAO 39th Assembly urged states, regional and international aviation organizations and industry to demonstrate strong, determined leadership and commitment to advance women's rights and enhance gender equality in global aviation. Pakistan's NAP2019 also provides incentives for training female pilots to encourage their participation in aviation.",
                 certificateNo: "ICAO-WOMEN-2025",
@@ -227,7 +241,7 @@ function getDefaultTrainingData() {
                 title: "AI and Blockchain in Aviation at COMSATS",
                 category: "AI and Digital Transformation in Aviation Industry",
                 provider: "COMSATS University Islamabad, Lahore campus",
-                date: "2000",
+                date: "2019-11-01",
                 duration: "1 Day",
                 description: "Modern technologies are improving business processes and changing landscape of aviation industry. Held talk with Computer Science students of COMSATS University Islamabad, Lahore campus on Artificial Intelligence and Blockchain Technology in Aviation Industry.",
                 images: [
@@ -301,10 +315,10 @@ function getDefaultTrainingData() {
                 ]
             },
             {
-                title: "National Aviation Policy 2023",
+                title: "National Aviation Policy",
                 category: "Aviation Law and Policy",
                 provider: "Institute of Business Administration, Karachi",
-                date: "2025",
+                date: "2025-09-14",
                 duration: "1 Day",
                 description: "Delivered a lecture on National Aviation Policy 2023 to participants of the Aviation Leadership and Management program at IBA Karachi.",
                 images: [
@@ -342,7 +356,7 @@ function getDefaultTrainingData() {
                 title: "FRMUN Chief Guest Address",
                 category: "Aviation Management",
                 provider: "PAF Fazaia College Risalpur",
-                date: "2026",
+                date: "2026-05-12",
                 duration: "1 Day",
                 description: "Participated as the Chief Guest in the award and closing ceremony of Fazaia Risalpur Model United Nations Forum, emphasizing leadership, debate, and global awareness.",
                 images: [
@@ -355,7 +369,7 @@ function getDefaultTrainingData() {
                 title: "Aviation and Tourism Panel Discussion",
                 category: "Aviation Connectivity and Tourism",
                 provider: "COTHM and PTDC",
-                date: "2000",
+                date: "2026-05-28",
                 duration: "1 Day",
                 description: "Joined a panel discussion to explore the role of aviation in promoting tourism in Pakistan.",
                 images: [
@@ -458,7 +472,7 @@ function getDefaultTrainingData() {
                 title: "Digital Transformation Strategies in Aviation (UET Lahore)",
                 category: "AI and Digital Transformation in Aviation Industry",
                 provider: "Electrical Engineering Department, UET Lahore",
-                date: "2020",
+                date: "2020-03-13",
                 duration: "1 Day",
                 description: "Interlock between big data and digital transformation is driving change to traditional business models. New data created by work processes will be analysed continuously to improve services. Held an interactive session with students of Electrical Engineering of UET Lahore on digital transformation strategies in Aviation Industry.",
                 images: [
@@ -523,7 +537,7 @@ function getDefaultTrainingData() {
                 title: "CNS Systems and the Changing Aviation Landscape (LUMS)",
                 category: "Communication and Navigation Services",
                 provider: "Syed Babar Ali School of Science and Engineering, LUMS",
-                date: "2019",
+                date: "2019-02-09",
                 duration: "1 Day",
                 description: "Held discussion with students of Syed Babar Ali School of Science and Engineering, Lahore University of Management Sciences on 'Communication, Navigation and Surveillance Systems for Global Air Traffic Management, The Changing landscape of Aviation Industry'.",
                 images: [
@@ -536,7 +550,7 @@ function getDefaultTrainingData() {
                 title: "ICAO Policy Initiatives & National Aviation Policy (University of Lahore)",
                 category: "Aviation Law and Policy",
                 provider: "University of Lahore",
-                date: "2000",
+                date: "2018-11-12",
                 duration: "1 Day",
                 description: "Shared my views on ICAO policy initiatives and strategic priorities for global aviation, future outlook of Aviation Industry and National Aviation Policy with next generation of aviation professionals at University of Lahore.",
                 images: [
@@ -545,100 +559,11 @@ function getDefaultTrainingData() {
                     "uol3.jpg"
                 ]
             },
-            {
-                title: "Revival and Promotion of Aviation in Pakistan",
-                category: "Aviation Management",
-                provider: "Aviation Industry, Pakistan",
-                date: "2016-04-12",
-                duration: "1 Day",
-                description: "Certificate for revival and promotion of aviation in Pakistan.",
-                certificateNo: "2016-04-12",
-                images: [
-                    "2016-04-12 revival and promotion of aviation in pakistan .jpg"
-                ],
-                type: "Certificate"
-            },
-            {
-                title: "Eco-Friendly Initiatives in the Aviation Industry",
-                category: "Sustainability",
-                provider: "Institute of Environmental Engineering and Research, UET Lahore",
-                date: "2019-04-13",
-                duration: "1 Day",
-                description: "Held discussion with Environmental Engineering students at Institute of Environmental Engineering and Research, University of Engineering and Technology Lahore on ECO friendly initiatives by Aviation Industry.",
-                certificateNo: "2019-04-13",
-                images: [
-                    "UETeco1.jpg",
-                    "UETeco2.jpg",
-                    "2019-04-13.jpg"
-                ],
-                type: "Certificate"
-            },
-            {
-                title: "School of Civil and Environmental Engineering",
-                category: "Sustainability",
-                provider: "School of Civil and Environmental Engineering, UET Lahore",
-                date: "2019-04-18",
-                duration: "1 Day",
-                description: "Certificate for engagement with civil and environmental engineering students on aviation sustainability initiatives.",
-                certificateNo: "2019-04-18",
-                images: [
-                    "2019-04-18 SCHOOL OF CIVIL AND ENVIRONMENTAL ENGINEERING.jpg"
-                ],
-                type: "Certificate"
-            },
-            {
-                title: "COMSATS University Islamabad",
-                category: "AI and Digital Transformation in Aviation Industry",
-                provider: "COMSATS University Islamabad, Lahore Campus",
-                date: "2019-11-01",
-                duration: "1 Day",
-                description: "Certificate for session on artificial intelligence and blockchain technology in the Aviation Industry.",
-                certificateNo: "2019-11-01",
-                images: [
-                    "2019-11-01 COMSATS University Islamabad.jpg"
-                ],
-                type: "Certificate"
-            },
-            {
-                title: "Environmental Science Department, LCWU",
-                category: "Sustainability",
-                provider: "Environmental Science Department, Lahore College for Women University",
-                date: "2019-11-15",
-                duration: "1 Day",
-                description: "Certificate for discussion on eco friendly policies and initiatives of the Aviation Industry with environmental science students.",
-                certificateNo: "2019-11-15",
-                images: [
-                    "2019-11-15 environmental science department, LCWU.jpg"
-                ],
-                type: "Certificate"
-            },
-            {
-                title: "Department of Economics, GC University Lahore",
-                category: "Aviation Law and Policy",
-                provider: "Department of Economics, GC University Lahore",
-                date: "2019-12-23",
-                duration: "1 Day",
-                description: "Certificate for session on informal and illegal economies, challenges and Aviation Industry initiatives.",
-                certificateNo: "2019-12-23",
-                images: [
-                    "2019-12-23 department of Economics GC University Lahore .jpg"
-                ],
-                type: "Certificate"
-            },
-            {
-                title: "Eco Friendly Policies and Initiatives by Aviation Industry (UET Lahore)",
-                category: "Sustainability",
-                provider: "University of Engineering and Technology, Lahore",
-                date: "2020-01-31",
-                duration: "1 Day",
-                description: "Certificate for discussion on eco friendly policies and initiatives of the Aviation Industry with UET Lahore students.",
-                certificateNo: "2020-01-31",
-                images: [
-                    "2020-01-31 ECO FRIENDLY POLICIES AND INICIATIVES BY AVIATION INDUSTRY UET, Lahore.jpg"
-                ],
-                type: "Certificate"
-            },
-            {
+        
+           
+            
+            
+            /*{
                 title: "Applications of Artificial Intelligence",
                 category: "AI and Digital Transformation in Aviation Industry",
                 provider: "Aviation Industry",
@@ -650,6 +575,20 @@ function getDefaultTrainingData() {
                     "2020-02-11 APPLICATIONS OF ARTIFICIAL INTELLIGENCE .jpg"
                 ],
                 type: "Certificate"
+            },*/
+            {
+                title: "Artificial Intelligence & Digital Transformation",
+                category: "AI and Digital Transformation in Aviation Industry",
+                provider: "LUMS School of Science & Engineering",
+                date: "2020-02-15",
+                duration: "1 Day",
+                description: "Innovative technologies are shaping up the landscape of Aviation Industry. These technologies will improve business processes. Held a talk on Artificial Intelligence & Digital Transformation with computer science students of LUMS School of Science & Engineering.",
+                images: [
+                    "lums1.jpg",
+                    "lums2.jpg"
+                   
+                ],
+                type: "Seminar"
             },
             {
                 title: "Aviation Development and Economic Growth",
@@ -691,6 +630,20 @@ function getDefaultTrainingData() {
                 ]
             },
             {
+                title: "Emerging Trends of Airport Engineering and Environmental Engineering (NUST Islamabad)",
+                category: "Airport Planning and Engineering",
+                provider: "NUST Islamabad, Institute of Civil and Environmental Engineering",
+                date: "2019-04-20",
+                duration: "1 Day",
+                description: "Held discussion with students of NUST Islamabad, Institute of Civil and Environmental Engineering on emerging trends of Airport engineering and Environmental Engineering (NICE).",
+                images: [
+                    "nu1.jpg",
+                    "nu2.jpg",
+                    "nu3.jpg"
+                ],
+                type: "Seminar"
+            },
+            {
                 title: "Visit to Emirates Aviation University, Dubai",
                 category: "Aviation Education",
                 provider: "Emirates Aviation University, Dubai",
@@ -703,8 +656,8 @@ function getDefaultTrainingData() {
                     "dubai3.jpg"
                 ]
             },
-            {
-                title: "International Civil Aviation Day — Air University",
+            /*{
+                title: "International Civil Aviation Day at Air University",
                 category: "Aviation Education",
                 provider: "Air University",
                 date: "2023-12-23",
@@ -715,12 +668,12 @@ function getDefaultTrainingData() {
                     "airii.jpg",
                     "airiii.jpg"
                 ]
-            },
+            },*/
             {
                 title: "Aviation Diplomacy (Guest Speaker)",
                 category: "Aviation Diplomacy",
                 provider: "Islamabad International Airport / FSAISB",
-                date: "2023-12-23",
+                date: "2023-12-02",
                 duration: "1 Day",
                 description: "Chief Operating Officer/Airport Manager of Islamabad International Airport spoke on Aviation Diplomacy at FSAISB.",
                 images: [
@@ -743,29 +696,136 @@ function getDefaultTrainingData() {
                 ]
             },
             {
-                title: "Air Cargo Operations & Supply Chain Management (LUMS SDSB)",
-                category: "Aviation Management",
-                provider: "Suleman Dawood School of Business, LUMS",
-                date: "2022-04-01",
-                duration: "1 Day",
-                description: "Held an interactive session with the MBA 2023 class of LUMS Suleman Dawood School of Business on Air Cargo Operations and Supply Chain management: Impacts of COVID-19 and the Russia-Ukraine war.",
+                title: "2025-12-19 KESTRAL Trading",
+                category: "Certificates",
+                provider: "KESTRAL Trading",
+                date: "2025-12-19",
+                description: "KESTRAL Trading certificate issued on 19 December 2025.",
                 images: [
-                    "lumsblue1.png",
-                    "lumsblue1.jpg",
-                    "lumsblue2.jpg"
-                ]
+                    "2025-12-19 KESTRAL Trading .jpg"
+                ],
+                type: "Certificate"
             },
             {
-                title: "Flight Safety Officers Briefing (CASM, PAF Base Nur Khan)",
-                category: "Flight Safety",
-                provider: "CASM, PAF Base Nur Khan",
-                date: "2024-05-01",
-                duration: "1 Day",
-                description: "Briefing given to course participants of the Flight Safety Officers course at CASM, PAF Base Nur Khan about Airport operations and Safety Management System.",
+                title: "2025-10-22 Appreciation for support during serious incident of Cessna aircraft",
+                category: "Certificates",
+                provider: "Civil Aviation Authority",
+                date: "2025-10-22",
+                description: "Appreciation letter for support during a serious incident involving a Cessna aircraft.",
                 images: [
-                    "brief1.png",
-                    "brief2.png"
-                ]
+                    "2025-10-22 appreciation for support during serious incident of cessna aircraft.jpg"
+                ],
+                type: "Certificate"
+            },
+            {
+                title: "2025-09-24 Appreciation Letter MOD",
+                category: "Certificates",
+                provider: "Ministry of Defence",
+                date: "2025-09-24",
+                description: "Letter of appreciation from the Ministry of Defence.",
+                images: [
+                    "2025-09-24 appreciation letter MOD .jpg"
+                ],
+                type: "Certificate"
+            },
+            {
+                title: "2025-05-30 Spirit of inter-institutional harmony PAF",
+                category: "Certificates",
+                provider: "Pakistan Air Force",
+                date: "2025-05-30",
+                description: "Spirit of inter-institutional harmony certificate from the Pakistan Air Force.",
+                images: [
+                    "2025-05-30 spirit of inter-institutional harmony PAF.jpg"
+                ],
+                type: "Certificate"
+            },
+            {
+                title: "2025-05-02 First Overseas Pakistan Convention 2025",
+                category: "Certificates",
+                provider: "Pakistan Convention",
+                date: "2025-05-02",
+                description: "Certificate for participation in the First Overseas Pakistan Convention 2025.",
+                images: [
+                    "2025-05-02 first overseas Pakistan convention 2025.jpg"
+                ],
+                type: "Certificate"
+            },
+            {
+                title: "2024-12-30 Commendation for outstanding contribution and leadership",
+                category: "Certificates",
+                provider: "Civil Aviation Authority",
+                date: "2024-12-30",
+                description: "Commendation for outstanding contribution and leadership.",
+                images: [
+                    "2024-12-30 Commendation for outstanding contribution and leadership.jpg"
+                ],
+                type: "Certificate"
+            },
+            {
+                title: "2024-09-06 Route to Makkah Project",
+                category: "Certificates",
+                provider: "Civil Aviation Authority",
+                date: "2024-09-06",
+                description: "Certificate for participation in the Route to Makkah Project.",
+                images: [
+                    "2024-09-06 route to makkah project .jpg"
+                ],
+                type: "Certificate"
+            },
+            {
+                title: "2024-01-26 Award of letter of appreciation from the worthy DGCAA on account of meritorious tasks accomplishment",
+                category: "Certificates",
+                provider: "DGCAA",
+                date: "2024-01-26",
+                description: "Letter of appreciation from the DGCAA for meritorious task accomplishment.",
+                images: [
+                    "2024-01-26 award of letter of appreciation fromthe worthy DGCAA on account of meritorious tasks accomplishment.jpg"
+                ],
+                type: "Certificate"
+            },
+            {
+                title: "2024-01-24 Letter of Appreciation on full scale emergency exercise FSAEE at IIAP",
+                category: "Certificates",
+                provider: "IIAP",
+                date: "2024-01-24",
+                description: "Letter of appreciation for full scale emergency exercise FSAEE at IIAP.",
+                images: [
+                    "2024-01-24 LETTER OF APPRECIATION on full scale emergency exercise FSAEE at IIAP .jpg"
+                ],
+                type: "Certificate"
+            },
+            {
+                title: "2023-2024 Certificate of appreciation EMIRATES",
+                category: "Certificates",
+                provider: "Emirates",
+                date: "2023-2024",
+                description: "Certificate of appreciation from Emirates for 2023-2024.",
+                images: [
+                    "2023-2024 Certificate of appreciation EMIRATES .jpg"
+                ],
+                type: "Certificate"
+            },
+            {
+                title: "2023-11-06 British High Commission Islamabad",
+                category: "Certificates",
+                provider: "British High Commission Islamabad",
+                date: "2023-11-06",
+                description: "Certificate from the British High Commission Islamabad.",
+                images: [
+                    "2023-11-06 British High Commission Islamabad .jpg"
+                ],
+                type: "Certificate"
+            },
+            {
+                title: "2022-11-11 CAA DGs Commendation Certificate",
+                category: "Certificates",
+                provider: "Civil Aviation Authority",
+                date: "2022-11-11",
+                description: "CAA Director Generals Commendation Certificate.",
+                images: [
+                    "2022-11-11 CAA DGs Commendation Certificate.jpg"
+                ],
+                type: "Certificate"
             }
         ];
 }

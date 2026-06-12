@@ -1189,6 +1189,7 @@
             <button class="tab-btn" onclick="switchTab('add-seminar')">Add Seminar</button>
             <button class="tab-btn" onclick="switchTab('add-achievement')">Add Achievement</button>
             <button class="tab-btn" onclick="switchTab('add-certificate')">Add Certificate</button>
+            <button class="tab-btn" onclick="switchTab('manage-certificates')">Manage Certificates</button>
             <button class="tab-btn" onclick="switchTab('manage')">Manage All</button>
         </div>
 
@@ -1405,6 +1406,13 @@
         </div>
 
         <!-- Manage All Tab -->
+        <div class="tab-content" id="manage-certificates">
+            <div class="dashboard-section">
+                <h3 class="section-title">Manage Certificates</h3>
+                <div id="certificateRecordsContainer" class="records-grid"></div>
+            </div>
+        </div>
+
         <div class="tab-content" id="manage">
             <div class="dashboard-section">
                 <h3 class="section-title">All Seminars & Certificates</h3>
@@ -1431,6 +1439,10 @@
                     <div class="form-group">
                         <label for="editProvider">Provider *</label>
                         <input type="text" id="editProvider" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCertificateNo">Certificate Number</label>
+                        <input type="text" id="editCertificateNo" placeholder="Optional certificate number">
                     </div>
                     <div class="form-group">
                         <label for="editDate">Date *</label>
@@ -1474,6 +1486,7 @@
 
         let currentEditingId = null;
         let allRecords = [];
+        let deletedRecordKeys = [];
 
         const imagePickerConfig = {
             seminar: { fileInputId: 'seminarImageFiles', pathInputId: 'seminarImagePath', textareaId: 'seminarImages', previewId: 'seminarImagePreview', items: [] },
@@ -1485,6 +1498,7 @@
         // The main profile page owns the full default data set. Do not seed a
         // partial admin-only list here, because that can hide most seminars.
         function initializeData() {
+            loadDeletedKeys();
             loadRecords();
             populateCategoryDropdown();
             setupImagePickers();
@@ -1644,6 +1658,8 @@
 
             if (tabName === 'manage') {
                 loadAllRecords();
+            } else if (tabName === 'manage-certificates') {
+                loadCertificateRecords();
             } else if (tabName === 'add-certificate') {
                 populateCertCategoryDropdown();
             } else if (tabName === 'add-seminar') {
@@ -1703,9 +1719,34 @@
             return orderedKeys.map(key => merged.get(key));
         }
 
+        function getRecordKey(record) {
+            return [record.title, record.provider, record.date].join('|').toLowerCase();
+        }
+
+        function loadDeletedKeys() {
+            try {
+                deletedRecordKeys = JSON.parse(localStorage.getItem('deletedTrainingRecords') || '[]');
+                if (!Array.isArray(deletedRecordKeys)) {
+                    deletedRecordKeys = [];
+                }
+            } catch (error) {
+                deletedRecordKeys = [];
+            }
+        }
+
+        function saveDeletedKeys() {
+            localStorage.setItem('deletedTrainingRecords', JSON.stringify(deletedRecordKeys));
+        }
+
+        function removeDeletedRecordKey(recordKey) {
+            deletedRecordKeys = deletedRecordKeys.filter(key => key !== recordKey);
+            saveDeletedKeys();
+        }
+
         function loadRecords() {
             const stored = JSON.parse(localStorage.getItem('trainingRecords') || '[]');
-            const deduped = deduplicateTrainingRecords(stored);
+            const deduped = deduplicateTrainingRecords(stored)
+                .filter(record => !deletedRecordKeys.includes(getRecordKey(record)));
             allRecords = deduped;
             if (deduped.length !== stored.length) {
                 saveRecords();
@@ -1745,6 +1786,7 @@
                 type: 'Seminar'
             };
 
+            removeDeletedRecordKey(getRecordKey(newRecord));
             allRecords.push(newRecord);
             saveRecords();
 
@@ -1787,6 +1829,7 @@
                 type: 'Achievement'
             };
 
+            removeDeletedRecordKey(getRecordKey(newRecord));
             allRecords.push(newRecord);
             saveRecords();
 
@@ -1941,6 +1984,7 @@
                 type: 'Certificate'
             };
 
+            removeDeletedRecordKey(getRecordKey(newRecord));
             allRecords.push(newRecord);
             saveRecords();
 
@@ -2159,11 +2203,35 @@
 
             container.innerHTML = allRecords.map(record => `
                 <div class="record-card">
-                    <h4>${record.title}</h4>
-                    <div class="record-meta">${formatDate(record.date)} | ${record.provider}</div>
-                    <div class="record-category">${record.category}</div>
+                    <h4>${escapeHtml(record.title)}</h4>
+                    <div class="record-meta">${formatDate(record.date)} | ${escapeHtml(record.provider)}</div>
+                    <div class="record-category">${escapeHtml(record.category)}</div>
                     ${record.type === 'Certificate' ? '<div style="color: var(--purple); font-size: 0.85rem; margin-bottom: 8px;">Profile Certificate</div>' : ''}
-                    ${record.type === 'Certificate' && record.certificateNo ? `<div style="color: var(--green); font-size: 0.85rem; margin-bottom: 8px;">Certificate No: ${record.certificateNo}</div>` : ''}
+                    ${record.type === 'Certificate' && record.certificateNo ? `<div style="color: var(--green); font-size: 0.85rem; margin-bottom: 8px;">Certificate No: ${escapeHtml(record.certificateNo)}</div>` : ''}
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary btn-small" onclick="openEditModal('${record.id}')">Edit</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteRecord('${record.id}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadCertificateRecords() {
+            loadRecords();
+            const container = document.getElementById('certificateRecordsContainer');
+            const certificates = allRecords.filter(record => record.type === 'Certificate');
+
+            if (certificates.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No certificates found. Add one from the Add Certificate tab.</p></div>';
+                return;
+            }
+
+            container.innerHTML = certificates.map(record => `
+                <div class="record-card">
+                    <h4>${escapeHtml(record.title)}</h4>
+                    <div class="record-meta">${formatDate(record.date)} | ${escapeHtml(record.provider)}</div>
+                    <div class="record-category">${escapeHtml(record.category)}</div>
+                    ${record.certificateNo ? `<div style="color: var(--green); font-size: 0.85rem; margin-bottom: 8px;">Certificate No: ${escapeHtml(record.certificateNo)}</div>` : ''}
                     <div class="action-buttons">
                         <button class="btn btn-secondary btn-small" onclick="openEditModal('${record.id}')">Edit</button>
                         <button class="btn btn-danger btn-small" onclick="deleteRecord('${record.id}')">Delete</button>
@@ -2181,6 +2249,7 @@
                 document.getElementById('editTitle').value = record.title;
                 document.getElementById('editCategory').value = record.category;
                 document.getElementById('editProvider').value = record.provider;
+                document.getElementById('editCertificateNo').value = record.certificateNo || '';
                 document.getElementById('editDate').value = record.date;
                 document.getElementById('editDescription').value = record.description;
                 setImagePickerItems('edit', record.images || []);
@@ -2203,9 +2272,11 @@
                 record.title = document.getElementById('editTitle').value;
                 record.category = document.getElementById('editCategory').value;
                 record.provider = document.getElementById('editProvider').value;
+                record.certificateNo = document.getElementById('editCertificateNo').value;
                 record.date = document.getElementById('editDate').value;
                 record.description = document.getElementById('editDescription').value;
                 record.images = getImagePickerValues('edit');
+                removeDeletedRecordKey(getRecordKey(record));
 
                 saveRecords();
                 clearImagePicker('edit');
@@ -2219,6 +2290,14 @@
 
         function deleteRecord(recordId) {
             if (confirm('Are you sure you want to delete this record?')) {
+                const record = allRecords.find(r => r.id === recordId);
+                if (record) {
+                    const key = getRecordKey(record);
+                    if (!deletedRecordKeys.includes(key)) {
+                        deletedRecordKeys.push(key);
+                        saveDeletedKeys();
+                    }
+                }
                 allRecords = allRecords.filter(r => r.id !== recordId);
                 saveRecords();
                 loadAllRecords();
