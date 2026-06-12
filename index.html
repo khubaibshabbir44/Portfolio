@@ -961,7 +961,7 @@
         <section class="hero-section">
             <div class="hero-inner">
                 <div class="hero-photo">
-                    <img src="Profile.jpg" alt="Profile Photo">
+                    <img src="Profile.jpg" alt="Profile Photo" loading="eager" decoding="async" fetchpriority="high">
                 </div>
                 <div class="hero-copy">
                     
@@ -987,8 +987,8 @@
                                 <div class="edu-detail edu-caption">Master of Business Administration (MBA), Operations management</div>
                                 <div class="edu-year">2010 - 2012</div>
                                 <div class="edu-images">
-                                    <div class="gallery-card"><img src="lumsconvo1.jpg" alt="LUMS 1"></div>
-                                    <div class="gallery-card"><img src="lumsconvo2.jpg" alt="LUMS 2"></div>
+                                    <div class="gallery-card"><img src="lumsconvo1.jpg" alt="LUMS 1" loading="lazy" decoding="async"></div>
+                                    <div class="gallery-card"><img src="lumsconvo2.jpg" alt="LUMS 2" loading="lazy" decoding="async"></div>
                                    
                                 </div>
                             </div>
@@ -998,8 +998,8 @@
                                 <div class="edu-detail edu-caption">Public Policy program - Public Policy</div>
                                 <div class="edu-year">2017 - 2018</div>
                                 <div class="edu-images">
-                                    <div class="gallery-card"><img src="(LKYSPP).png" alt="LKYSPP 1"></div>
-                                    <div class="gallery-card"><img src="(LKYSPP)1.jpg" alt="LKYSPP 2"></div>
+                                    <div class="gallery-card"><img src="(LKYSPP).png" alt="LKYSPP 1" loading="lazy" decoding="async"></div>
+                                    <div class="gallery-card"><img src="(LKYSPP)1.jpg" alt="LKYSPP 2" loading="lazy" decoding="async"></div>
                                     
                                 </div>
                             </div>
@@ -1009,8 +1009,8 @@
                                 <div class="edu-detail edu-caption">Civil Aviation Management, Airports and Airlines management</div>
                                 <div class="edu-year">2014 - 2015</div>
                                 <div class="edu-images">
-                                    <div class="gallery-card"><img src="CivilAviationManagementProgramSingapore.jpg" alt="Singapore 1"></div>
-                                    <div class="gallery-card"><img src="SingaporeCivilAviationManagement.jpg" alt="Singapore 2"></div>
+                                    <div class="gallery-card"><img src="CivilAviationManagementProgramSingapore.jpg" alt="Singapore 1" loading="lazy" decoding="async"></div>
+                                    <div class="gallery-card"><img src="SingaporeCivilAviationManagement.jpg" alt="Singapore 2" loading="lazy" decoding="async"></div>
                                 </div>
                             </div>
 
@@ -1019,7 +1019,7 @@
                                 <div class="edu-detail edu-caption">Aviation Policy for Executives</div>
                                 <div class="edu-year">2014</div>
                                 <div class="edu-images">
-                                    <div class="gallery-card"><img src="AviationPolicySouthKorea.jpg" alt="South Korea 1"></div>
+                                    <div class="gallery-card"><img src="AviationPolicySouthKorea.jpg" alt="South Korea 1" loading="lazy" decoding="async"></div>
                                     
                                 </div>
                             </div>
@@ -1031,7 +1031,7 @@
                                 <div class="edu-detail edu-caption">Master of Science (M.Sc.), Physics</div>
                                 <div class="edu-year">1992 - 1994</div>
                                 <div class="edu-images">
-                                    <div class="gallery-card"><img src="gcconvo1.jpg" alt="GC 1"></div>
+                                    <div class="gallery-card"><img src="gcconvo1.jpg" alt="GC 1" loading="lazy" decoding="async"></div>
                                    
                                 </div>
                             </div>
@@ -1058,6 +1058,9 @@
             <div class="no-results" id="noResultsMessage" style="display:none;">
                 <strong>No matching records found.</strong>
                 Adjust your search or filter selection to display records.
+            </div>
+            <div class="education-return">
+                <button id="loadMoreRecordsBtn" class="btn btn-secondary" type="button" style="display:none;">Load More</button>
             </div>
         </section>
 
@@ -1251,8 +1254,11 @@
         const typeFilter = document.getElementById('typeFilter');
         const recordsContainer = document.getElementById('recordsContainer');
         const noResultsMessage = document.getElementById('noResultsMessage');
+        const loadMoreRecordsBtn = document.getElementById('loadMoreRecordsBtn');
 
         let filteredData = [...trainingData];
+        let visibleRecordLimit = 12;
+        const recordBatchSize = 12;
 
         async function init() {
             await refreshTrainingData({ fallbackToDefaults: true });
@@ -1266,6 +1272,10 @@
             searchInput.addEventListener('input', filterAndRender);
             categoryFilter.addEventListener('change', filterAndRender);
             typeFilter.addEventListener('change', filterAndRender);
+            loadMoreRecordsBtn.addEventListener('click', () => {
+                visibleRecordLimit += recordBatchSize;
+                renderRecords();
+            });
         }
 
         // Toggle profile details from the hero and education section.
@@ -1332,6 +1342,7 @@
         }
 
         function filterAndRender() {
+            visibleRecordLimit = recordBatchSize;
             const query = searchInput.value.trim().toLowerCase();
             const category = categoryFilter.value;
             const type = typeFilter.value;
@@ -1355,6 +1366,7 @@
             recordsContainer.innerHTML = '';
             if (!filteredData.length) {
                 noResultsMessage.style.display = 'block';
+                loadMoreRecordsBtn.style.display = 'none';
                 return;
             }
             noResultsMessage.style.display = 'none';
@@ -1373,9 +1385,13 @@
                 return new Date(b.date) - new Date(a.date);
             });
 
+            const visibleData = sortedData.slice(0, visibleRecordLimit);
+            loadMoreRecordsBtn.style.display = sortedData.length > visibleRecordLimit ? 'inline-flex' : 'none';
+            loadMoreRecordsBtn.textContent = `Load More (${Math.min(recordBatchSize, sortedData.length - visibleRecordLimit)} of ${sortedData.length - visibleRecordLimit} remaining)`;
+
             // Group by type and category
             const groupedByTypeAndCategory = {};
-            sortedData.forEach(item => {
+            visibleData.forEach(item => {
                 const typeKey = item.type || 'Seminar';
                 const categoryKey = item.category;
                 
@@ -1436,7 +1452,7 @@
                     </div>
                     <p class="training-description">${item.description}</p>
                     <div class="gallery-grid">
-                        ${item.images.map((src, idx) => `<div class="gallery-card"><img src="${src || placeholderImage()}" alt="${item.title} photo ${idx + 1}"><div class="gallery-pill">Photo ${idx + 1}</div></div>`).join('')}
+                        ${item.images.map((src, idx) => `<div class="gallery-card"><img src="${src || placeholderImage()}" alt="${item.title} photo ${idx + 1}" loading="lazy" decoding="async"><div class="gallery-pill">Photo ${idx + 1}</div></div>`).join('')}
                     </div>
                 </div>
             `;

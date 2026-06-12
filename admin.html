@@ -1159,7 +1159,7 @@
         <h3>ADMIN LOGIN</h3>
 
         <div class="admin-info">
-            <img src="Profile.jpg" alt="Profile">
+            <img src="Profile.jpg" alt="Profile" loading="eager" decoding="async">
             <h4>Syed Aftab Gillani</h4>
             <p>Chief Operating Officer</p>
             <p>Islamabad International Airport, Pakistan</p>
@@ -1186,7 +1186,7 @@
         <div class="admin-header">
             <div class="admin-header-content">
                 <div class="admin-profile-photo">
-                    <img src="Profile.jpg" alt="Admin Profile">
+                    <img src="Profile.jpg" alt="Admin Profile" loading="eager" decoding="async">
                 </div>
                 <div class="admin-header-text">
                     <h1>Syed Aftab Gillani</h1>
@@ -1665,7 +1665,7 @@
             preview.innerHTML = config.items.map((item, index) => `
                 <div class="image-preview-item">
                     <button type="button" class="image-preview-remove" onclick="removeImagePickerItem('${key}', ${index})" aria-label="Remove image">×</button>
-                    <img src="${item.src}" alt="${escapeHtml(item.label)}">
+                    <img src="${item.src}" alt="${escapeHtml(item.label)}" loading="lazy" decoding="async">
                     <span>${escapeHtml(item.label)}</span>
                 </div>
             `).join('');
@@ -2201,7 +2201,7 @@
             const galleryHtml = images.length
                 ? `<div class="gallery-grid">${images.map((src, idx) => `
                     <div class="gallery-card">
-                        <img src="${src || placeholderImage()}" alt="${escapeHtml(item.title)} photo ${idx + 1}">
+                        <img src="${src || placeholderImage()}" alt="${escapeHtml(item.title)} photo ${idx + 1}" loading="lazy" decoding="async">
                         <div class="gallery-pill">Photo ${idx + 1}</div>
                     </div>`).join('')}</div>`
                 : '';
