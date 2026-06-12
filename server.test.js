@@ -5,7 +5,7 @@ const {
   loadDefaultTrainingData,
   normalizeTrainingRecord,
   parseEnvFile
-} = require('./server');
+} = require('./lib/portfolio-api');
 
 test('parseEnvFile reads simple env values', () => {
   assert.deepEqual(parseEnvFile('A=one\nB="two"\n# ignored\nC=three=four'), {
