@@ -1187,6 +1187,7 @@
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard</button>
             <button class="tab-btn" onclick="switchTab('add-seminar')">Add Seminar</button>
+            <button class="tab-btn" onclick="switchTab('add-achievement')">Add Achievement</button>
             <button class="tab-btn" onclick="switchTab('add-certificate')">Add Certificate</button>
             <button class="tab-btn" onclick="switchTab('manage')">Manage All</button>
         </div>
@@ -1278,6 +1279,68 @@
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" onclick="resetSeminarForm()">Clear</button>
                         <button type="submit" class="btn btn-primary">Add Seminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Achievement Tab -->
+        <div class="tab-content" id="add-achievement">
+            <div class="form-container">
+                <h3 class="section-title">Add New Achievement</h3>
+                <div class="success-message" id="achievementSuccess">Achievement added successfully!</div>
+                <form id="addAchievementForm" onsubmit="handleAddAchievement(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="achievementTitle">Title *</label>
+                            <input type="text" id="achievementTitle" required placeholder="Achievement title">
+                        </div>
+                        <div class="form-group">
+                            <label for="achievementCategory">Category *</label>
+                            <div style="display: flex; gap: 8px;">
+                                <select id="achievementCategory" class="form-select" required style="flex: 1;">
+                                    <option value="">-- Select Category --</option>
+                                    <option value="__new__">+ Add New Category</option>
+                                </select>
+                            </div>
+                            <div class="new-category-panel" id="newAchievementCategoryPanel">
+                                <label for="achievementCategoryNew">New category name</label>
+                                <input type="text" id="achievementCategoryNew" class="form-select" placeholder="Enter new category name">
+                                <button type="button" class="new-category-add-btn" onclick="confirmNewAchievementCategory()">Add Category</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="achievementProvider">Provider/Organization *</label>
+                            <input type="text" id="achievementProvider" required placeholder="Organization name">
+                        </div>
+                        <div class="form-group">
+                            <label for="achievementDate">Date *</label>
+                            <input type="date" id="achievementDate" required>
+                        </div>
+                        <div class="form-group full">
+                            <label for="achievementDescription">Description *</label>
+                            <textarea id="achievementDescription" required placeholder="Detailed description of the achievement"></textarea>
+                        </div>
+                        <div class="form-group full image-picker-block">
+                            <label>Photos</label>
+                            <div class="image-picker-toolbar">
+                                <label class="image-upload-btn">
+                                    <input type="file" id="achievementImageFiles" accept="image/*" multiple>
+                                    Select From Computer
+                                </label>
+                                <div class="image-path-add">
+                                    <input type="text" id="achievementImagePath" placeholder="Or type filename e.g. achievement1.jpg">
+                                    <button type="button" class="btn btn-secondary btn-small" onclick="addManualImagePath('achievement')">Add Path</button>
+                                </div>
+                            </div>
+                            <p class="image-picker-hint">Select images from your computer or add existing filenames. Saved values appear below.</p>
+                            <textarea id="achievementImages" readonly placeholder="Saved images will appear here..."></textarea>
+                            <div class="image-preview-grid" id="achievementImagePreview"></div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="resetAchievementForm()">Clear</button>
+                        <button type="submit" class="btn btn-primary">Add Achievement</button>
                     </div>
                 </form>
             </div>
@@ -1414,6 +1477,7 @@
 
         const imagePickerConfig = {
             seminar: { fileInputId: 'seminarImageFiles', pathInputId: 'seminarImagePath', textareaId: 'seminarImages', previewId: 'seminarImagePreview', items: [] },
+            achievement: { fileInputId: 'achievementImageFiles', pathInputId: 'achievementImagePath', textareaId: 'achievementImages', previewId: 'achievementImagePreview', items: [] },
             certificate: { fileInputId: 'certImageFiles', pathInputId: 'certImagePath', textareaId: 'certImages', previewId: 'certImagePreview', items: [] },
             edit: { fileInputId: 'editImageFiles', pathInputId: 'editImagePath', textareaId: 'editImages', previewId: 'editImagePreview', items: [] }
         };
@@ -1425,6 +1489,7 @@
             populateCategoryDropdown();
             setupImagePickers();
             bindCategoryDropdownEvents();
+            bindAchievementCategoryDropdownEvents();
         }
 
         function setupImagePickers() {
@@ -1693,6 +1758,48 @@
             updateDashboard();
         }
 
+        function handleAddAchievement(event) {
+            event.preventDefault();
+            const successDiv = document.getElementById('achievementSuccess');
+            
+            let category = document.getElementById('achievementCategory').value;
+            if (category === '__new__') {
+                alert('Please enter the new category name and click Add Category');
+                showNewAchievementCategoryPanel();
+                return;
+            }
+            
+            if (!category) {
+                alert('Please select or create a category');
+                return;
+            }
+            
+            const newRecord = {
+                id: generateId(),
+                title: document.getElementById('achievementTitle').value,
+                category: category,
+                provider: document.getElementById('achievementProvider').value,
+                date: document.getElementById('achievementDate').value,
+                duration: '1 Day',
+                description: document.getElementById('achievementDescription').value,
+                certificateNo: '',
+                images: getImagePickerValues('achievement'),
+                type: 'Achievement'
+            };
+
+            allRecords.push(newRecord);
+            saveRecords();
+
+            successDiv.classList.add('show');
+            setTimeout(() => successDiv.classList.remove('show'), 3000);
+
+            document.getElementById('addAchievementForm').reset();
+            hideNewAchievementCategoryPanel();
+            clearImagePicker('achievement');
+            populateCategoryDropdown();
+            updateDashboard();
+        }
+
         function showNewCategoryPanel() {
             document.getElementById('newCategoryPanel').classList.add('show');
             document.getElementById('seminarCategoryNew').focus();
@@ -1728,6 +1835,41 @@
             hideNewCategoryPanel();
         }
 
+        function showNewAchievementCategoryPanel() {
+            document.getElementById('newAchievementCategoryPanel').classList.add('show');
+            document.getElementById('achievementCategoryNew').focus();
+        }
+
+        function hideNewAchievementCategoryPanel() {
+            document.getElementById('newAchievementCategoryPanel').classList.remove('show');
+            document.getElementById('achievementCategoryNew').value = '';
+        }
+
+        function confirmNewAchievementCategory() {
+            const input = document.getElementById('achievementCategoryNew');
+            const name = input.value.trim();
+            if (!name) {
+                alert('Please enter a category name');
+                input.focus();
+                return;
+            }
+
+            const select = document.getElementById('achievementCategory');
+            const existing = [...select.options].find(option => option.value === name);
+            if (existing) {
+                select.value = name;
+            } else {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                const addNewOption = select.querySelector('option[value="__new__"]');
+                select.insertBefore(option, addNewOption);
+                select.value = name;
+            }
+
+            hideNewAchievementCategoryPanel();
+        }
+
         function bindCategoryDropdownEvents() {
             const select = document.getElementById('seminarCategory');
             const newCategoryInput = document.getElementById('seminarCategoryNew');
@@ -1750,6 +1892,33 @@
                     if (event.key === 'Enter') {
                         event.preventDefault();
                         confirmNewCategory();
+                    }
+                });
+            }
+        }
+
+        function bindAchievementCategoryDropdownEvents() {
+            const select = document.getElementById('achievementCategory');
+            const newCategoryInput = document.getElementById('achievementCategoryNew');
+            if (!select || select.dataset.bound === 'true') {
+                return;
+            }
+
+            select.dataset.bound = 'true';
+            select.addEventListener('change', function() {
+                if (this.value === '__new__') {
+                    showNewAchievementCategoryPanel();
+                } else {
+                    hideNewAchievementCategoryPanel();
+                }
+            });
+
+            if (newCategoryInput && !newCategoryInput.dataset.bound) {
+                newCategoryInput.dataset.bound = 'true';
+                newCategoryInput.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        confirmNewAchievementCategory();
                     }
                 });
             }
@@ -1822,7 +1991,29 @@
                 select.value = currentValue;
             }
 
+            // Also populate achievement category dropdown
+            const achievementSelect = document.getElementById('achievementCategory');
+            if (achievementSelect) {
+                const achievementCurrentValue = achievementSelect.value;
+                achievementSelect.innerHTML = `
+                    <option value="">-- Select Category --</option>
+                    <option value="__new__">+ Add New Category</option>
+                `;
+
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    achievementSelect.appendChild(option);
+                });
+
+                if (achievementCurrentValue && achievementCurrentValue !== '__new__') {
+                    achievementSelect.value = achievementCurrentValue;
+                }
+            }
+
             bindCategoryDropdownEvents();
+            bindAchievementCategoryDropdownEvents();
         }
 
         function populateEditCategoryDropdown() {
@@ -2039,6 +2230,12 @@
             document.getElementById('addSeminarForm').reset();
             hideNewCategoryPanel();
             clearImagePicker('seminar');
+        }
+
+        function resetAchievementForm() {
+            document.getElementById('addAchievementForm').reset();
+            hideNewAchievementCategoryPanel();
+            clearImagePicker('achievement');
         }
 
         function resetCertForm() {
