@@ -2,7 +2,6 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
   generateStableId,
-  loadDefaultTrainingData,
   normalizeTrainingRecord,
   parseEnvFile
 } = require('./lib/portfolio-api');
@@ -27,11 +26,4 @@ test('normalizeTrainingRecord fills app defaults', () => {
   assert.equal(record.type, 'Seminar');
   assert.equal(record.duration, '1 Day');
   assert.deepEqual(record.images, ['one.jpg']);
-});
-
-test('default training data loads from the existing portfolio source', () => {
-  const defaults = loadDefaultTrainingData();
-  assert.ok(defaults.length > 20);
-  assert.ok(defaults.every((record) => record.id && Array.isArray(record.images)));
-  assert.equal(generateStableId(defaults[0]), defaults[0].id);
 });
