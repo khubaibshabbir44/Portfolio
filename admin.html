@@ -1777,6 +1777,17 @@
         let allRecords = [];
         let deletedRecordKeys = [];
 
+        // Bump DATA_VERSION_DATE after deploying data changes to force all active sessions to re-fetch
+        const DATA_VERSION_DATE = new Date('2026-06-13').getTime();
+        const RECORDS_STALE_AFTER_MS = 5 * 60 * 1000; // 5 minutes
+        let recordsLastFetchedAt = 0;
+
+        function isRecordsStale() {
+            if (!recordsLastFetchedAt) return true;
+            if (recordsLastFetchedAt < DATA_VERSION_DATE) return true;
+            return (Date.now() - recordsLastFetchedAt) > RECORDS_STALE_AFTER_MS;
+        }
+
         async function apiRequest(path, options = {}) {
             const response = await fetch(path, {
                 ...options,
@@ -2075,6 +2086,7 @@
             const deduped = deduplicateTrainingRecords(records || [])
                 .filter(record => !deletedRecordKeys.includes(getRecordKey(record)));
             allRecords = deduped;
+            recordsLastFetchedAt = Date.now();
         }
 
         async function saveRecords() {
@@ -2410,7 +2422,7 @@
         }
 
         async function updateDashboard({ reload = true } = {}) {
-            if (reload) {
+            if (reload || isRecordsStale()) {
                 if (document.getElementById('seminarSection').classList.contains('open')) {
                     document.getElementById('dashboardSeminars').innerHTML = loadingHTML('Loading seminars...');
                 }
@@ -2581,7 +2593,7 @@
 
         async function loadAllRecords({ reload = true } = {}) {
             const container = document.getElementById('allRecordsContainer');
-            if (reload) {
+            if (reload || isRecordsStale()) {
                 container.innerHTML = loadingHTML('Loading records...');
                 await loadRecords();
             }
@@ -2608,7 +2620,7 @@
 
         async function loadCertificateRecords({ reload = true } = {}) {
             const container = document.getElementById('certificateRecordsContainer');
-            if (reload) {
+            if (reload || isRecordsStale()) {
                 container.innerHTML = loadingHTML('Loading certificates...');
                 await loadRecords();
             }
