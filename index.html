@@ -997,6 +997,97 @@
                 white-space: normal;
             }
         }
+
+        /* ── Global overflow guards ── */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .btn {
+            white-space: normal;
+            text-align: center;
+            line-height: 1.3;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .training-top h3,
+        .training-description,
+        .dash-label,
+        .provider,
+        .badge,
+        .hero-copy h1,
+        .hero-copy p {
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        /* ── 2-column gallery between mobile and tablet ── */
+        @media (min-width: 481px) and (max-width: 760px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ── Extra-small devices (<480px) ── */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .hero-section {
+                padding: 16px;
+                border-radius: 18px;
+            }
+
+            .hero-copy h1 {
+                font-size: 1.8rem;
+            }
+
+            .kpi-card {
+                min-height: auto;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-card {
+                padding: 16px 14px;
+            }
+
+            .badge {
+                font-size: 0.7rem;
+                padding: 5px 9px;
+            }
+
+            .training-top h3 {
+                font-size: 1rem;
+            }
+
+            .button-group .btn {
+                padding: 10px 14px;
+                font-size: 0.88rem;
+            }
+
+            .controls-section {
+                gap: 10px;
+            }
+
+            .control-panel {
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .meta-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
