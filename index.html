@@ -1059,9 +1059,7 @@
                 <strong>No matching records found.</strong>
                 Adjust your search or filter selection to display records.
             </div>
-            <div class="education-return">
-                <button id="loadMoreRecordsBtn" class="btn btn-secondary" type="button" style="display:none;">Load More</button>
-            </div>
+            <div id="loadMoreTrigger" style="height: 20px; margin-top: 20px;"></div>
         </section>
 
         <div class="toolbar-footer">Syed Aftab Gilani</div>
@@ -1254,11 +1252,12 @@
         const typeFilter = document.getElementById('typeFilter');
         const recordsContainer = document.getElementById('recordsContainer');
         const noResultsMessage = document.getElementById('noResultsMessage');
-        const loadMoreRecordsBtn = document.getElementById('loadMoreRecordsBtn');
+        const loadMoreTrigger = document.getElementById('loadMoreTrigger');
 
         let filteredData = [...trainingData];
         let visibleRecordLimit = 12;
         const recordBatchSize = 12;
+        let isLoadingMore = false;
 
         async function init() {
             await refreshTrainingData({ fallbackToDefaults: true });
@@ -1272,10 +1271,35 @@
             searchInput.addEventListener('input', filterAndRender);
             categoryFilter.addEventListener('change', filterAndRender);
             typeFilter.addEventListener('change', filterAndRender);
-            loadMoreRecordsBtn.addEventListener('click', () => {
-                visibleRecordLimit += recordBatchSize;
-                renderRecords();
-            });
+            setupInfiniteScroll();
+        }
+
+        function setupInfiniteScroll() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !isLoadingMore) {
+                        const typeOrder = { 'Seminar': 1, 'Achievement': 2, 'Certificate': 3 };
+                        const sortedData = [...filteredData].sort((a, b) => {
+                            const typeA = typeOrder[a.type] || 999;
+                            const typeB = typeOrder[b.type] || 999;
+                            if (typeA !== typeB) return typeA - typeB;
+                            if (a.category !== b.category) return a.category.localeCompare(b.category);
+                            return new Date(b.date) - new Date(a.date);
+                        });
+
+                        if (visibleRecordLimit < sortedData.length) {
+                            isLoadingMore = true;
+                            visibleRecordLimit += recordBatchSize;
+                            setTimeout(() => {
+                                renderRecords();
+                                isLoadingMore = false;
+                            }, 300);
+                        }
+                    }
+                });
+            }, { rootMargin: '200px' });
+
+            observer.observe(loadMoreTrigger);
         }
 
         // Toggle profile details from the hero and education section.
@@ -1366,7 +1390,6 @@
             recordsContainer.innerHTML = '';
             if (!filteredData.length) {
                 noResultsMessage.style.display = 'block';
-                loadMoreRecordsBtn.style.display = 'none';
                 return;
             }
             noResultsMessage.style.display = 'none';
@@ -1386,8 +1409,6 @@
             });
 
             const visibleData = sortedData.slice(0, visibleRecordLimit);
-            loadMoreRecordsBtn.style.display = sortedData.length > visibleRecordLimit ? 'inline-flex' : 'none';
-            loadMoreRecordsBtn.textContent = `Load More (${Math.min(recordBatchSize, sortedData.length - visibleRecordLimit)} of ${sortedData.length - visibleRecordLimit} remaining)`;
 
             // Group by type and category
             const groupedByTypeAndCategory = {};
