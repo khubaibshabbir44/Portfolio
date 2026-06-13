@@ -1088,14 +1088,6 @@
                             </div>
 
                         </div>
-                        <div class="education-return">
-                            <button id="hideProfileBtn" class="profile-collapse-btn" type="button" title="Return to profile" aria-label="Return to profile">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                                    <path d="M18 15l-6-6-6 6"></path>
-                                </svg>
-                                <span class="sr-only">Return to profile</span>
-                            </button>
-                        </div>
                     </section>
                 </div>
             </div>
@@ -1366,7 +1358,7 @@
 
             const showProfile = () => {
                 profile.style.display = 'block';
-                btn.textContent = 'Hide Profile';
+                btn.textContent = 'Hide Educational Qualifications';
             };
 
             const hideProfile = () => {
@@ -1518,7 +1510,6 @@
                     <div class="training-top">
                         <div>
                             ${achievementBadge}
-                            <span class="badge badge-primary">${item.category}</span>
                             <h3>${index}. ${item.title}</h3>
                             <p class="provider">${item.provider}</p>
                         </div>
