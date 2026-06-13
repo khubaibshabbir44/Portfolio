@@ -91,7 +91,7 @@ function serveStatic(req, res, url) {
     const ext = path.extname(filePath).toLowerCase();
     res.writeHead(200, {
       'Content-Type': contentTypes[ext] || 'application/octet-stream',
-      'Cache-Control': ['.html', '.js'].includes(ext) ? 'no-store' : 'public, max-age=300'
+      'Cache-Control': ['.html', '.js'].includes(ext) ? 'no-store' : 'public, max-age=31536000, immutable'
     });
     res.end(data);
   });
