@@ -1915,12 +1915,47 @@
         // Bump DATA_VERSION_DATE after deploying data changes to force all active sessions to re-fetch
         const DATA_VERSION_DATE = new Date('2026-06-13').getTime();
         const RECORDS_STALE_AFTER_MS = 5 * 60 * 1000; // 5 minutes
+        const SYNC_INTERVAL_MS = 30 * 1000; // poll every 30 seconds for cross-admin freshness
         let recordsLastFetchedAt = 0;
+        let syncTimer = null;
 
         function isRecordsStale() {
             if (!recordsLastFetchedAt) return true;
             if (recordsLastFetchedAt < DATA_VERSION_DATE) return true;
             return (Date.now() - recordsLastFetchedAt) > RECORDS_STALE_AFTER_MS;
+        }
+
+        function recordsChecksum(records) {
+            return records.map(r => (r.id || '') + '|' + (r.category || '') + '|' + (r.title || '')).join('~');
+        }
+
+        async function backgroundSync() {
+            // Don't interrupt if a modal is open (user may be mid-edit/save)
+            if (document.querySelector('.modal.show')) return;
+            try {
+                const { records } = await apiRequest(`/api/training-records?_=${Date.now()}`, { cache: 'no-store' });
+                const fresh = deduplicateTrainingRecords(records || [])
+                    .filter(r => !deletedRecordKeys.includes(getRecordKey(r)));
+                if (recordsChecksum(fresh) === recordsChecksum(allRecords)) return;
+                allRecords = fresh;
+                recordsLastFetchedAt = Date.now();
+                const activeId = document.querySelector('.tab-content.active')?.id;
+                if (activeId === 'dashboard') await updateDashboard({ reload: false });
+                else if (activeId === 'manage') await loadAllRecords({ reload: false });
+                else if (activeId === 'manage-certificates') await loadCertificateRecords({ reload: false });
+                else if (activeId === 'manage-categories') renderCategories();
+                populateCategoryDropdown();
+                populateCertCategoryDropdown();
+            } catch { /* silent — don't disrupt the user on poll failure */ }
+        }
+
+        function startBackgroundSync() {
+            if (syncTimer) clearInterval(syncTimer);
+            syncTimer = setInterval(backgroundSync, SYNC_INTERVAL_MS);
+        }
+
+        function stopBackgroundSync() {
+            if (syncTimer) { clearInterval(syncTimer); syncTimer = null; }
         }
 
         // ── Category management ────────────────────────────────────────────
@@ -2233,6 +2268,7 @@
             setupImagePickers();
             bindCategoryDropdownEvents();
             bindAchievementCategoryDropdownEvents();
+            startBackgroundSync();
         }
 
         function setupImagePickers() {
@@ -2366,6 +2402,7 @@
         }
 
         async function handleLogout() {
+            stopBackgroundSync();
             await apiRequest('/api/auth/logout', { method: 'POST' }).catch(() => {});
             showLoginScreen();
             document.getElementById('loginForm').reset();
@@ -2468,7 +2505,7 @@
         }
 
         async function loadRecords() {
-            const { records } = await apiRequest('/api/training-records', { cache: 'no-store' });
+            const { records } = await apiRequest(`/api/training-records?_=${Date.now()}`, { cache: 'no-store' });
             const deduped = deduplicateTrainingRecords(records || [])
                 .filter(record => !deletedRecordKeys.includes(getRecordKey(record)));
             allRecords = deduped;
@@ -2924,6 +2961,7 @@
                         <div class="training-top-right">
                             <div class="training-date">${formatDate(item.date)}</div>
                             <button type="button" class="btn btn-secondary btn-small edit-inline-btn" onclick="openEditModal('${item.id}')">Edit</button>
+                            <button type="button" class="btn btn-danger btn-small" onclick="deleteRecord('${item.id}')">Delete</button>
                         </div>
                     </div>
                     <p class="training-description">${escapeHtml(item.description)}</p>
@@ -2943,7 +2981,10 @@
                     <div class="record-meta">${escapeHtml(record.provider)}</div>
                     <div class="record-category">${escapeHtml(record.category)}</div>
                     ${certLine}
-                    <button class="btn btn-secondary btn-small" onclick="openEditModal('${record.id}')">Edit</button>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary btn-small" onclick="openEditModal('${record.id}')">Edit</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteRecord('${record.id}')">Delete</button>
+                    </div>
                 </div>
             `;
         }
@@ -3077,8 +3118,11 @@
                 }
                 allRecords = allRecords.filter(r => r.id !== recordId);
                 notifyPortfolioRecordsChanged();
-                await loadAllRecords({ reload: false });
-                await updateDashboard({ reload: false });
+                await Promise.all([
+                    loadAllRecords({ reload: false }),
+                    loadCertificateRecords({ reload: false }),
+                    updateDashboard({ reload: false })
+                ]);
             }
         }
 
