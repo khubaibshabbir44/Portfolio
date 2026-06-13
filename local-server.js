@@ -3,6 +3,7 @@ const http = require('node:http');
 const path = require('node:path');
 const {
   config,
+  handleCategories,
   handleDeleteRecord,
   handleLogin,
   handleLogout,
@@ -52,6 +53,7 @@ async function handleApi(req, res, url) {
   if (url.pathname === '/api/auth/login') return handleLogin(req, res);
   if (url.pathname === '/api/auth/session') return handleSession(req, res);
   if (url.pathname === '/api/auth/logout') return handleLogout(req, res);
+  if (url.pathname === '/api/categories') return handleCategories(req, res);
   if (url.pathname === '/api/training-records/events' && req.method === 'GET') return handleRecordEvents(req, res);
   if (url.pathname === '/api/training-records') return handleLocalRecords(req, res);
   if (url.pathname.startsWith('/api/training-records/')) {

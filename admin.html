@@ -1302,6 +1302,94 @@
             }
         }
 
+        /* ── Category management ── */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .category-manage-card {
+            background: var(--surface);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .category-manage-card:hover {
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+        }
+
+        .category-manage-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .category-manage-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .category-manage-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+            flex-wrap: wrap;
+        }
+
+        .cat-badge-pending {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.15);
+            color: #d97706;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        .category-edit-input {
+            width: 100%;
+            padding: 9px 13px;
+            border: 2px solid var(--indigo);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: #f8fafc;
+            color: var(--text);
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .add-category-form {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .add-category-form .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .category-error {
+            color: var(--red);
+            font-size: 0.88rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .category-error.show {
+            display: block;
+        }
+
         /* ── Global overflow guards ── */
         img {
             max-width: 100%;
@@ -1466,6 +1554,7 @@
             <button class="tab-btn" onclick="switchTab('add-achievement')">Add Achievement</button>
             <button class="tab-btn" onclick="switchTab('add-certificate')">Add Certificate</button>
             <button class="tab-btn" onclick="switchTab('manage-certificates')">Manage Certificates</button>
+            <button class="tab-btn" onclick="switchTab('manage-categories')">Manage Categories</button>
             <button class="tab-btn" onclick="switchTab('manage')">Manage All</button>
         </div>
 
@@ -1705,6 +1794,26 @@
             </div>
         </div>
 
+        <!-- Manage Categories Tab -->
+        <div class="tab-content" id="manage-categories">
+            <div class="form-container">
+                <h3 class="section-title">Add New Category</h3>
+                <div class="add-category-form">
+                    <div class="form-group">
+                        <label for="newCategoryName">Category Name</label>
+                        <input type="text" id="newCategoryName" placeholder="e.g. Airport Safety" maxlength="80"
+                               onkeydown="if(event.key==='Enter'){event.preventDefault();handleAddCategory();}">
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="handleAddCategory()">Add Category</button>
+                </div>
+                <div class="category-error" id="categoryError"></div>
+            </div>
+            <div class="dashboard-section">
+                <h3 class="section-title">Existing Categories</h3>
+                <div id="categoriesContainer"></div>
+            </div>
+        </div>
+
         <div class="tab-content" id="manage">
             <div class="dashboard-section">
                 <h3 class="section-title">All Seminars & Certificates</h3>
@@ -1714,6 +1823,7 @@
     </div>
 
     <!-- Edit Modal -->
+
     <div class="modal" id="editModal">
         <div class="modal-content">
             <h2>Edit Record</h2>
@@ -1769,6 +1879,23 @@
         </div>
     </div>
 
+    <!-- Reassign & Delete Category Modal -->
+    <div class="modal" id="reassignModal">
+        <div class="modal-content">
+            <h2>Delete Category</h2>
+            <p id="reassignDesc" style="color:var(--text-muted);margin-bottom:20px;line-height:1.6;"></p>
+            <div class="form-group" id="reassignTargetGroup">
+                <label for="reassignTarget">Move all records to</label>
+                <select id="reassignTarget" class="form-select"></select>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="btn btn-secondary" onclick="closeReassignModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" id="reassignAllBtn" onclick="reassignAllRecords()">Reassign All</button>
+                <button type="button" class="btn btn-danger" id="deleteCategoryBtn" onclick="executeCategoryDelete()" disabled>Delete Category</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const ADMIN_NAME = 'Syed Aftab Gillani';
         const ADMIN_TITLE = 'Chief Operating Officer, Islamabad International Airport';
@@ -1787,6 +1914,235 @@
             if (recordsLastFetchedAt < DATA_VERSION_DATE) return true;
             return (Date.now() - recordsLastFetchedAt) > RECORDS_STALE_AFTER_MS;
         }
+
+        // ── Category management ────────────────────────────────────────────
+
+        let pendingCategoriesFromDb = [];
+
+        function getPendingCategories() {
+            return pendingCategoriesFromDb;
+        }
+
+        function setPendingCategories(cats) {
+            saveCustomCategories(cats).catch(err => console.error('Failed to persist categories:', err));
+        }
+
+        function getAllCategories() {
+            const fromRecords = [...new Set(allRecords.map(r => r.category).filter(Boolean))];
+            const pending = pendingCategoriesFromDb.filter(p => !fromRecords.includes(p));
+            return [...fromRecords, ...pending].sort();
+        }
+
+        async function loadCustomCategories() {
+            try {
+                const { categories } = await apiRequest('/api/categories');
+                // One-time migration: merge any categories still in localStorage
+                let local = [];
+                try { local = JSON.parse(localStorage.getItem('admin_pending_categories') || '[]'); } catch {}
+                if (local.length) {
+                    localStorage.removeItem('admin_pending_categories');
+                    const merged = [...new Set([...categories, ...local])];
+                    await saveCustomCategories(merged);
+                } else {
+                    pendingCategoriesFromDb = categories;
+                }
+            } catch {
+                try { pendingCategoriesFromDb = JSON.parse(localStorage.getItem('admin_pending_categories') || '[]'); }
+                catch { pendingCategoriesFromDb = []; }
+            }
+        }
+
+        async function saveCustomCategories(cats) {
+            pendingCategoriesFromDb = cats;
+            await apiRequest('/api/categories', {
+                method: 'POST',
+                body: JSON.stringify({ categories: cats })
+            });
+        }
+
+        let editingCategoryName = null;
+        let categoryToDelete = null;
+
+        async function loadCategories({ reload = true } = {}) {
+            const container = document.getElementById('categoriesContainer');
+            if (reload || isRecordsStale()) {
+                container.innerHTML = loadingHTML('Loading categories...');
+                await Promise.all([loadRecords(), loadCustomCategories()]);
+            }
+            renderCategories();
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categoriesContainer');
+            const categories = getAllCategories();
+            if (!categories.length) {
+                container.innerHTML = '<div class="empty-state"><p>No categories yet. Add one above.</p></div>';
+                return;
+            }
+            const pending = getPendingCategories();
+            container.innerHTML = `<div class="categories-grid">` + categories.map(cat => {
+                const count = allRecords.filter(r => r.category === cat).length;
+                const isPending = pending.includes(cat);
+                if (cat === editingCategoryName) {
+                    return `
+                        <div class="category-manage-card">
+                            <input class="category-edit-input" id="categoryEditInput" type="text"
+                                value="${escapeHtml(cat)}" maxlength="80"
+                                onkeydown="if(event.key==='Enter')saveEditCategory(${JSON.stringify(cat)});else if(event.key==='Escape'){editingCategoryName=null;renderCategories();}">
+                            <div class="category-manage-actions">
+                                <button class="btn btn-primary btn-small" onclick="saveEditCategory(${JSON.stringify(cat)})">Save</button>
+                                <button class="btn btn-secondary btn-small" onclick="editingCategoryName=null;renderCategories()">Cancel</button>
+                            </div>
+                        </div>`;
+                }
+                return `
+                    <div class="category-manage-card">
+                        <div class="category-manage-name">${escapeHtml(cat)}</div>
+                        <div class="category-manage-meta">
+                            ${isPending
+                                ? '<span class="cat-badge-pending">New — unused</span>'
+                                : `${count} record${count !== 1 ? 's' : ''}`}
+                        </div>
+                        <div class="category-manage-actions">
+                            <button class="btn btn-secondary btn-small" onclick="editingCategoryName=${JSON.stringify(cat)};renderCategories()">Edit</button>
+                            <button class="btn btn-danger btn-small" onclick="promptDeleteCategory(${JSON.stringify(cat)})">Delete</button>
+                        </div>
+                    </div>`;
+            }).join('') + `</div>`;
+
+            if (editingCategoryName) {
+                const input = document.getElementById('categoryEditInput');
+                if (input) { input.focus(); input.select(); }
+            }
+        }
+
+        function handleAddCategory() {
+            const input = document.getElementById('newCategoryName');
+            const errorEl = document.getElementById('categoryError');
+            const name = input.value.trim();
+            errorEl.classList.remove('show');
+
+            if (!name) { errorEl.textContent = 'Please enter a category name.'; errorEl.classList.add('show'); return; }
+            if (getAllCategories().map(c => c.toLowerCase()).includes(name.toLowerCase())) {
+                errorEl.textContent = `"${name}" already exists.`; errorEl.classList.add('show'); return;
+            }
+
+            setPendingCategories([...getPendingCategories(), name]);
+            input.value = '';
+            renderCategories();
+            populateCategoryDropdown();
+            populateCertCategoryDropdown();
+        }
+
+        async function saveEditCategory(oldName) {
+            const input = document.getElementById('categoryEditInput');
+            const newName = input?.value.trim();
+            editingCategoryName = null;
+            if (!newName || newName === oldName) { renderCategories(); return; }
+
+            const existing = getAllCategories().map(c => c.toLowerCase());
+            if (existing.includes(newName.toLowerCase()) && newName.toLowerCase() !== oldName.toLowerCase()) {
+                alert(`Category "${newName}" already exists.`);
+                renderCategories(); return;
+            }
+
+            const affected = allRecords.filter(r => r.category === oldName);
+            if (affected.length) {
+                document.getElementById('categoriesContainer').innerHTML = loadingHTML(`Renaming "${oldName}"...`);
+                affected.forEach(r => r.category = newName);
+                try {
+                    await Promise.all(affected.map(r => saveRecord(r)));
+                } catch (err) {
+                    affected.forEach(r => r.category = oldName);
+                    alert('Rename failed: ' + err.message);
+                    renderCategories(); return;
+                }
+                populateCategoryDropdown();
+                populateCertCategoryDropdown();
+                notifyPortfolioRecordsChanged();
+            }
+
+            const pending = getPendingCategories();
+            if (pending.includes(oldName)) {
+                setPendingCategories(pending.map(p => p === oldName ? newName : p));
+            }
+            renderCategories();
+        }
+
+        function promptDeleteCategory(name) {
+            const count = allRecords.filter(r => r.category === name).length;
+            if (count === 0) {
+                if (!confirm(`Delete category "${name}"?`)) return;
+                const pending = getPendingCategories();
+                if (pending.includes(name)) setPendingCategories(pending.filter(c => c !== name));
+                renderCategories();
+                populateCategoryDropdown();
+                populateCertCategoryDropdown();
+                return;
+            }
+            categoryToDelete = name;
+            const others = getAllCategories().filter(c => c !== name);
+            const select = document.getElementById('reassignTarget');
+            select.innerHTML = others.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+            document.getElementById('reassignTargetGroup').style.display = others.length ? '' : 'none';
+            updateReassignModal();
+            document.getElementById('reassignModal').classList.add('show');
+        }
+
+        function updateReassignModal() {
+            if (!categoryToDelete) return;
+            const remaining = allRecords.filter(r => r.category === categoryToDelete).length;
+            const deleteBtn = document.getElementById('deleteCategoryBtn');
+            const reassignBtn = document.getElementById('reassignAllBtn');
+            deleteBtn.disabled = remaining > 0;
+            reassignBtn.disabled = remaining === 0;
+            document.getElementById('reassignDesc').textContent = remaining > 0
+                ? `"${categoryToDelete}" has ${remaining} record${remaining !== 1 ? 's' : ''}. Reassign them to another category before deleting.`
+                : `All records reassigned. You can now delete "${categoryToDelete}".`;
+        }
+
+        async function reassignAllRecords() {
+            const target = document.getElementById('reassignTarget').value;
+            if (!target || !categoryToDelete) return;
+            const affected = allRecords.filter(r => r.category === categoryToDelete);
+            if (!affected.length) { updateReassignModal(); return; }
+
+            const btn = document.getElementById('reassignAllBtn');
+            btn.disabled = true;
+            btn.textContent = 'Reassigning...';
+
+            try {
+                affected.forEach(r => r.category = target);
+                await Promise.all(affected.map(r => saveRecord(r)));
+            } catch (err) {
+                affected.forEach(r => r.category = categoryToDelete);
+                alert('Reassignment failed: ' + err.message);
+            }
+
+            btn.textContent = 'Reassign All';
+            updateReassignModal();
+        }
+
+        function closeReassignModal() {
+            categoryToDelete = null;
+            document.getElementById('reassignModal').classList.remove('show');
+        }
+
+        function executeCategoryDelete() {
+            if (!categoryToDelete) return;
+            const remaining = allRecords.filter(r => r.category === categoryToDelete).length;
+            if (remaining > 0) return;
+            const pending = getPendingCategories();
+            if (pending.includes(categoryToDelete)) {
+                setPendingCategories(pending.filter(c => c !== categoryToDelete));
+            }
+            closeReassignModal();
+            renderCategories();
+            populateCategoryDropdown();
+            populateCertCategoryDropdown();
+        }
+
+        // ── End category management ────────────────────────────────────────
 
         async function apiRequest(path, options = {}) {
             const response = await fetch(path, {
@@ -1844,8 +2200,9 @@
         // partial admin-only list here, because that can hide most seminars.
         async function initializeData() {
             loadDeletedKeys();
-            await loadRecords();
+            await Promise.all([loadRecords(), loadCustomCategories()]);
             populateCategoryDropdown();
+            populateCertCategoryDropdown();
             setupImagePickers();
             bindCategoryDropdownEvents();
             bindAchievementCategoryDropdownEvents();
@@ -2005,6 +2362,8 @@
                 await loadAllRecords();
             } else if (tabName === 'manage-certificates') {
                 await loadCertificateRecords();
+            } else if (tabName === 'manage-categories') {
+                await loadCategories();
             } else if (tabName === 'add-certificate') {
                 populateCertCategoryDropdown();
             } else if (tabName === 'add-seminar') {
@@ -2210,19 +2569,13 @@
                 return;
             }
 
-            const select = document.getElementById('seminarCategory');
-            const existing = [...select.options].find(option => option.value === name);
-            if (existing) {
-                select.value = name;
-            } else {
-                const option = document.createElement('option');
-                option.value = name;
-                option.textContent = name;
-                const addNewOption = select.querySelector('option[value="__new__"]');
-                select.insertBefore(option, addNewOption);
-                select.value = name;
+            if (!getAllCategories().map(c => c.toLowerCase()).includes(name.toLowerCase())) {
+                setPendingCategories([...getPendingCategories(), name]);
             }
 
+            populateCategoryDropdown();
+            populateCertCategoryDropdown();
+            document.getElementById('seminarCategory').value = name;
             hideNewCategoryPanel();
         }
 
@@ -2245,19 +2598,13 @@
                 return;
             }
 
-            const select = document.getElementById('achievementCategory');
-            const existing = [...select.options].find(option => option.value === name);
-            if (existing) {
-                select.value = name;
-            } else {
-                const option = document.createElement('option');
-                option.value = name;
-                option.textContent = name;
-                const addNewOption = select.querySelector('option[value="__new__"]');
-                select.insertBefore(option, addNewOption);
-                select.value = name;
+            if (!getAllCategories().map(c => c.toLowerCase()).includes(name.toLowerCase())) {
+                setPendingCategories([...getPendingCategories(), name]);
             }
 
+            populateCategoryDropdown();
+            populateCertCategoryDropdown();
+            document.getElementById('achievementCategory').value = name;
             hideNewAchievementCategoryPanel();
         }
 
@@ -2345,7 +2692,7 @@
         }
 
         function populateCertCategoryDropdown() {
-            const categories = [...new Set(allRecords.map(r => r.category))].sort();
+            const categories = getAllCategories();
             const select = document.getElementById('certCategory');
             const currentValue = select.value;
             select.innerHTML = '<option value="">-- Select Category --</option>';
@@ -2363,7 +2710,7 @@
         }
 
         function populateCategoryDropdown() {
-            const categories = [...new Set(allRecords.map(r => r.category))].sort();
+            const categories = getAllCategories();
             const select = document.getElementById('seminarCategory');
             const currentValue = select.value;
 
