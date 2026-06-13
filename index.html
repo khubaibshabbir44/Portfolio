@@ -732,6 +732,14 @@
             box-shadow: 0 12px 28px rgba(15, 23, 42, 0.04);
         }
 
+        .education-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
         .education-card h4 {
             margin-bottom: 12px;
             color: var(--indigo);
@@ -757,13 +765,19 @@
         }
 
         .edu-caption {
-            font-size: 0.9rem;
-            color: var(--text-muted);
+            font-size: 0.96rem;
+            color: #d97706;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            margin-bottom: 6px;
         }
 
         .edu-year {
-            font-weight: 700;
+            font-family: Inter, sans-serif;
             color: var(--indigo);
+            font-size: 0.95rem;
+            font-weight: 700;
+            white-space: nowrap;
             margin-bottom: 8px;
         }
 
@@ -972,7 +986,7 @@
                         <p class="lead">Committed to advancing Airport Operations through innovation, efficiency, and continuous improvement, while fostering a culture of safety, service excellence, and sustainable growth.</p>
                     </div>
                     <div class="intro-actions">
-                        <button id="showMoreBtn" class="btn btn-primary">Detail Profile</button>
+                        <button id="showMoreBtn" class="btn btn-primary">Click to view Detailed Profile</button>
                         <div class="quote-box">
                             <p>What you leave behind is not what is engraved in stone monuments, but what is woven into the lives of others.</p>
                         </div>
@@ -983,31 +997,56 @@
                         </div>
                         <div class="education-list">
                             <div class="education-card">
-                                <h4>1. Lahore University of Management Sciences</h4>
-                                <div class="edu-detail edu-caption">Master of Business Administration (MBA), Operations management</div>
-                                <div class="edu-year">2010 - 2012</div>
+                            <div class="education-top">
+                                <div>
+                                    <h4>1. Master of Business Administration (MBA)</h4>
+                                    <div class="edu-detail edu-caption"> Lahore University of Management Sciences (LUMS)</div>
+                                </div>
+                                <div class="training-date edu-year">2010 - 2012</div>
+                            </div>
+                            <div class="edu-images">
+                                <div class="gallery-card"><img src="lumsconvo1.jpg?v=20260613" alt="LUMS 1" loading="lazy" decoding="async"></div>
+                                <div class="gallery-card"><img src="lumsconvo2.jpg" alt="LUMS 2" loading="lazy" decoding="async"></div>
+                               
+                            </div>
+                        </div>
+
+                            <div class="education-card">
+                                <div class="education-top">
+                                    <div>
+                                        <h4>2. Master of Science (M.Sc.), Physics</h4>
+                                        <div class="edu-detail edu-caption">Govt College (GC), University Lahore</div>
+                                    </div>
+                                    <div class="training-date edu-year">1992 - 1994</div>
+                                </div>
                                 <div class="edu-images">
-                                    <div class="gallery-card"><img src="lumsconvo1.jpg" alt="LUMS 1" loading="lazy" decoding="async"></div>
-                                    <div class="gallery-card"><img src="lumsconvo2.jpg" alt="LUMS 2" loading="lazy" decoding="async"></div>
+                                    <div class="gallery-card"><img src="gcconvo1.jpg" alt="GC 1" loading="lazy" decoding="async"></div>
                                    
                                 </div>
                             </div>
-
+                            
                             <div class="education-card">
-                                <h4>2. Lee Kuan Yew School of Public Policy</h4>
-                                <div class="edu-detail edu-caption">Public Policy program - Public Policy</div>
-                                <div class="edu-year">2017 - 2018</div>
+                                <div class="education-top">
+                                    <div>
+                                        <h4>3. Aviation Policy</h4>
+                                        <div class="edu-detail edu-caption">South Korea</div>
+                                    </div>
+                                    <div class="training-date edu-year">2014</div>
+                                </div>
                                 <div class="edu-images">
-                                    <div class="gallery-card"><img src="(LKYSPP).png" alt="LKYSPP 1" loading="lazy" decoding="async"></div>
-                                    <div class="gallery-card"><img src="(LKYSPP)1.jpg" alt="LKYSPP 2" loading="lazy" decoding="async"></div>
+                                    <div class="gallery-card"><img src="AviationPolicySouthKorea.jpg" alt="South Korea 1" loading="lazy" decoding="async"></div>
                                     
                                 </div>
                             </div>
-
+                            
                             <div class="education-card">
-                                <h4>3. Singapore</h4>
-                                <div class="edu-detail edu-caption">Civil Aviation Management, Airports and Airlines management</div>
-                                <div class="edu-year">2015</div>
+                                <div class="education-top">
+                                    <div>
+                                        <h4>4.Civil Aviation Management Program</h4>
+                                        <div class="edu-detail edu-caption">Singapore</div>
+                                    </div>
+                                    <div class="training-date edu-year">2015</div>
+                                </div>
                                 <div class="edu-images">
                                     <div class="gallery-card"><img src="CivilAviationManagementProgramSingapore.jpg" alt="Singapore 1" loading="lazy" decoding="async"></div>
                                     <div class="gallery-card"><img src="SingaporeCivilAviationManagement.jpg" alt="Singapore 2" loading="lazy" decoding="async"></div>
@@ -1015,26 +1054,20 @@
                             </div>
 
                             <div class="education-card">
-                                <h4>4. South Korea</h4>
-                                <div class="edu-detail edu-caption">Aviation Policy for Executives</div>
-                                <div class="edu-year">2014</div>
+                                <div class="education-top">
+                                    <div>
+                                        <h4>4. Public Policy Program</h4>
+                                        <div class="edu-detail edu-caption">Lee Kuan Yew School of Public Policy (LKYSPP), National University of Singapore</div>
+                                    </div>
+                                    <div class="training-date edu-year">2017 - 2018</div>
+                                </div>
                                 <div class="edu-images">
-                                    <div class="gallery-card"><img src="AviationPolicySouthKorea.jpg" alt="South Korea 1" loading="lazy" decoding="async"></div>
+                                    <div class="gallery-card"><img src="(LKYSPP).png" alt="LKYSPP 1" loading="lazy" decoding="async"></div>
+                                    <div class="gallery-card"><img src="(LKYSPP)1.jpg" alt="LKYSPP 2" loading="lazy" decoding="async"></div>
                                     
                                 </div>
                             </div>
 
-                         
-
-                            <div class="education-card">
-                                <h4>5. GC University Lahore</h4>
-                                <div class="edu-detail edu-caption">Master of Science (M.Sc.), Physics</div>
-                                <div class="edu-year">1992 - 1994</div>
-                                <div class="edu-images">
-                                    <div class="gallery-card"><img src="gcconvo1.jpg" alt="GC 1" loading="lazy" decoding="async"></div>
-                                   
-                                </div>
-                            </div>
                         </div>
                         <div class="education-return">
                             <button id="hideProfileBtn" class="profile-collapse-btn" type="button" title="Return to profile" aria-label="Return to profile">
