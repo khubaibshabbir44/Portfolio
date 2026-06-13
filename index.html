@@ -1294,26 +1294,11 @@
 
     <div class="watermark"><span>TRAINING PORTFOLIO</span></div>
 
-    <script src="js/training-defaults.js"></script>
     <script>
         // Load portfolio data from the server-backed Supabase store.
         let trainingData = [];
         let trainingDataSignature = '';
         
-        async function loadTrainingData() {
-            try {
-                const response = await fetch('/api/training-records');
-                if (!response.ok) {
-                    throw new Error('Unable to load database records');
-                }
-                const data = await response.json();
-                trainingData = deduplicateTrainingRecords((data.records || []).map(normalizeTrainingRecord));
-            } catch (error) {
-                console.error(error);
-                trainingData = getDefaultTrainingData().map(normalizeTrainingRecord);
-            }
-        }
-
         function getTrainingDataSignature(records) {
             return JSON.stringify(records.map(record => ({
                 id: record.id,
@@ -1328,7 +1313,7 @@
             })));
         }
 
-        async function refreshTrainingData({ fallbackToDefaults = false } = {}) {
+        async function refreshTrainingData() {
             try {
                 const response = await fetch('/api/training-records', { cache: 'no-store' });
                 if (!response.ok) {
@@ -1349,13 +1334,6 @@
                 return true;
             } catch (error) {
                 console.error(error);
-                if (fallbackToDefaults) {
-                    trainingData = getDefaultTrainingData().map(normalizeTrainingRecord);
-                    trainingDataSignature = getTrainingDataSignature(trainingData);
-                    filteredData = [...trainingData];
-                    populateCategoryOptions();
-                    filterAndRender();
-                }
                 return false;
             }
         }
@@ -1437,41 +1415,6 @@
             return orderedKeys.map(key => merged.get(key));
         }
 
-        function mergeTrainingRecords(defaultRecords, savedRecords) {
-            const savedByExactKey = new Map(savedRecords.map(record => [getRecordKey(record), record]));
-            const defaultSemanticKeys = new Set(defaultRecords.map(getSemanticRecordKey));
-
-            const merged = defaultRecords.map(defaultRecord => {
-                const exactKey = getRecordKey(defaultRecord);
-                if (savedByExactKey.has(exactKey)) {
-                    const savedRecord = savedByExactKey.get(exactKey);
-                    const mergedRecord = {
-                        ...defaultRecord,
-                        ...savedRecord,
-                        images: Array.isArray(savedRecord.images) && savedRecord.images.length
-                            ? savedRecord.images
-                            : defaultRecord.images || []
-                    };
-                    return mergedRecord;
-                }
-
-                const semanticMatch = savedRecords.find(record =>
-                    getSemanticRecordKey(record) === getSemanticRecordKey(defaultRecord)
-                );
-
-                return semanticMatch
-                    ? pickPreferredRecord(defaultRecord, semanticMatch)
-                    : defaultRecord;
-            });
-
-            savedRecords.forEach(record => {
-                if (!defaultSemanticKeys.has(getSemanticRecordKey(record))) {
-                    merged.push(record);
-                }
-            });
-
-            return deduplicateTrainingRecords(merged);
-        }
 
 
         const searchInput = document.getElementById('searchInput');
@@ -1488,8 +1431,7 @@
         let isLoadingMore = false;
 
         async function init() {
-            await refreshTrainingData({ fallbackToDefaults: true });
-            trainingData.forEach(item => { if (!item.type) item.type = 'Seminar'; });
+            await refreshTrainingData();
             attachEventListeners();
             setupShowMoreToggle();
             setupLiveDataRefresh();
@@ -1573,15 +1515,10 @@
         }
 
         function setupLiveDataRefresh() {
-            setInterval(() => {
-                refreshTrainingData();
-            }, 3000);
-
-            document.addEventListener('visibilitychange', () => {
-                if (!document.hidden) {
-                    refreshTrainingData();
-                }
-            });
+            if ('EventSource' in window) {
+                const es = new EventSource('/api/training-records/events');
+                es.addEventListener('records-updated', () => refreshTrainingData());
+            }
 
             if ('BroadcastChannel' in window) {
                 const channel = new BroadcastChannel('portfolio-records');
