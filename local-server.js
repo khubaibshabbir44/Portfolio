@@ -43,7 +43,7 @@ function handleRecordEvents(req, res) {
 
 async function handleLocalRecords(req, res) {
   await handleRecords(req, res);
-  if (['POST', 'DELETE'].includes(req.method)) {
+  if (['POST', 'DELETE'].includes(req.method) && res.statusCode < 400) {
     sendRecordsChangedEvent();
   }
 }
@@ -57,7 +57,7 @@ async function handleApi(req, res, url) {
   if (url.pathname.startsWith('/api/training-records/')) {
     const recordId = decodeURIComponent(url.pathname.split('/').pop());
     await handleDeleteRecord(req, res, recordId);
-    sendRecordsChangedEvent();
+    if (res.statusCode < 400) sendRecordsChangedEvent();
     return;
   }
   return sendError(res, 404, 'API endpoint not found');

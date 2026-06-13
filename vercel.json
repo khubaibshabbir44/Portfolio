@@ -1,7 +1,7 @@
 {
   "functions": {
     "server.js": {
-      "includeFiles": "{index.html,admin.html,js/**,*.jpg,*.png,*.webp,*.pdf,api/**,lib/**}"
+      "includeFiles": "{index.html,admin.html,js/**,api/**,lib/**}"
     },
     "api/**/*.js": {
       "includeFiles": "js/**"
@@ -14,18 +14,6 @@
     },
     {
       "source": "/admin.html",
-      "destination": "/server.js"
-    },
-    {
-      "source": "/:path*.jpg",
-      "destination": "/server.js"
-    },
-    {
-      "source": "/:path*.png",
-      "destination": "/server.js"
-    },
-    {
-      "source": "/:path*.webp",
       "destination": "/server.js"
     },
     {
@@ -49,6 +37,15 @@
         {
           "key": "Cache-Control",
           "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/:path*.(jpg|jpeg|png|webp|pdf)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     }
