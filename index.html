@@ -193,12 +193,22 @@
             display: grid;
             grid-template-columns: 260px minmax(0, 1fr);
             gap: 34px;
-            align-items: center;
+            align-items: flex-start;
+        }
+
+        .hero-inner .intro-actions {
+            grid-column: 1 / -1;
+            margin-top: 24px;
+            flex-direction: row;
+        }
+
+        .hero-inner .intro-actions .btn {
+            flex: 1;
         }
 
         .hero-photo {
-            width: 240px;
-            height: 280px;
+            width: 280px;
+            height: 370px;
             border-radius: 28px;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(15, 23, 42, 0.18));
             display: grid;
@@ -243,12 +253,14 @@
             font-size: clamp(2.6rem, 2.4vw, 3.4rem);
             line-height: 1.02;
             margin-bottom: 12px;
+            margin-left: 20px;
         }
 
         .hero-copy p.title {
             color: rgba(255, 255, 255, 0.9);
             font-size: 1rem;
             margin-bottom: 20px;
+            margin-left: 20px;
         }
 
         .hero-copy p.lead {
@@ -265,6 +277,7 @@
             border-radius: 22px;
             padding: 18px 20px;
             margin-bottom: 18px;
+            margin-left: 20px;
             backdrop-filter: blur(10px);
         }
 
@@ -602,48 +615,49 @@
 
         /* align intro actions and match profile-summary width */
         .intro-actions {
-            margin-top: 18px;
+            margin-top: 24px;
             display: flex;
-            align-items: center;
-            gap: 18px;
-            flex-wrap: nowrap;
-            max-width: 860px; /* match .profile-summary */
+            flex-direction: column;
+            gap: 14px;
+            align-items: stretch;
             width: 100%;
         }
 
         .intro-actions .btn {
-            flex: 0 0 160px;
-            min-width: 140px;
-            height: 52px;
-            padding: 10px 18px;
+            flex: 0 0 auto;
+            min-width: auto;
+            height: auto;
+            padding: 14px 18px;
             font-size: 1rem;
+            text-align: center;
         }
 
         .quote-box {
-            flex: 1 1 auto;
-            max-width: none;
-            padding: 16px 20px;
+            width: 100%;
+            max-width: 860px;
+            margin-left: 20px;
+            padding: 20px 24px;
             border-radius: 24px;
             background: rgba(255, 255, 255, 0.12);
             border: 1px solid rgba(255, 255, 255, 0.16);
             box-shadow: 0 14px 36px rgba(15, 23, 42, 0.06);
-            color: #f8fbff;
+            color: rgba(243, 223, 46, 0.952);
             font-style: italic;
             font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
             line-height: 1.6;
             position: relative;
             display: flex;
             align-items: center;
-            min-height: 52px;
+            justify-content: center;
         }
 
         .quote-box::before {
             content: '“';
             position: absolute;
             top: 10px;
-            left: 12px;
+            left: 25px;
             font-size: 2.2rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(243, 223, 46, 0.952);
             line-height: 1;
         }
 
@@ -651,16 +665,16 @@
             content: '”';
             position: absolute;
             bottom: 10px;
-            right: 480px;
+            right: 25px;
             font-size: 2.2rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(243, 223, 46, 0.952);
             line-height: 1;
         }
 
         .quote-box p {
             margin: 0;
             font-size: 0.98rem;
-            color: #f8fbff;
+            color: rgba(243, 223, 46, 0.952);
             text-align: justify;
             padding: 0 8px;
         }
@@ -671,6 +685,14 @@
             font-size: 0.82rem;
             opacity: 0.78;
             text-align: right;
+        }
+
+        .quote-box-btn {
+            width: 100%;
+            height: auto;
+            padding: 14px 18px;
+            font-size: 1rem;
+            text-align: center;
         }
 
         .education-return {
@@ -980,20 +1002,17 @@
                 <div class="hero-copy">
                     
                     <h1>Syed Aftab Gilani</h1>
-                    <p class="title">Chief Operating Officer, Islamabad International Airport</p>
+                    <p class="title">COO/Airport Manager, Islamabad International Airport</p>
                     <div class="profile-summary">
                         <p class="lead">MBA in Operations Management from LUMS, M.Sc. in Physics from GC University Lahore, Basic Air Traffic Control Course ,Aviation Policy,Civil Aviation management and Public Policy Program from renowned institutions in Singapore and South Korea.</p>
                         <p class="lead">Committed to advancing Airport Operations through innovation, efficiency, and continuous improvement, while fostering a culture of safety, service excellence, and sustainable growth.</p>
                     </div>
-                    <div class="intro-actions">
-                        <button id="showMoreBtn" class="btn btn-primary">Click to view Detailed Profile</button>
-                        <div class="quote-box">
-                            <p>What you leave behind is not what is engraved in stone monuments, but what is woven into the lives of others.</p>
-                        </div>
+                    <div class="quote-box">
+                        <p>What you leave behind is not what is engraved in stone monuments, but what is woven into the lives of others.</p>
                     </div>
                     <section id="profileSection" class="profile-details" style="display:none;">
                         <div class="section-header">
-                            <h2>Profile & Education</h2>
+                            <h2>Educational Qualifications</h2>
                         </div>
                         <div class="education-list">
                             <div class="education-card">
@@ -1056,7 +1075,7 @@
                             <div class="education-card">
                                 <div class="education-top">
                                     <div>
-                                        <h4>4. Public Policy Program</h4>
+                                        <h4>5. Public Policy Program</h4>
                                         <div class="edu-detail edu-caption">Lee Kuan Yew School of Public Policy (LKYSPP), National University of Singapore</div>
                                     </div>
                                     <div class="training-date edu-year">2017 - 2018</div>
@@ -1079,6 +1098,9 @@
                         </div>
                     </section>
                 </div>
+            </div>
+            <div class="intro-actions">
+                <button id="showMoreBtn" class="btn btn-primary quote-box-btn">Click to view Detailed Profile</button>
             </div>
         </section>
 
@@ -1345,13 +1367,11 @@
             const showProfile = () => {
                 profile.style.display = 'block';
                 btn.textContent = 'Hide Profile';
-                profile.scrollIntoView({ behavior: 'smooth' });
             };
 
             const hideProfile = () => {
                 profile.style.display = 'none';
-                btn.textContent = 'Detail Profile';
-                btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                btn.textContent = 'Click to view Detailed Profile';
             };
 
             btn.addEventListener('click', () => {
